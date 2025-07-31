@@ -1,0 +1,132 @@
+/* body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+} */
+
+.seers-cms-user-guide-container {
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+    /* margin: 0px 30px; */
+}
+
+.seers-cms-user-guide-card {
+    background-color: #fff;
+    height: fit-content;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    padding: 30px;
+    width: 45%;
+    margin-top: 50px;
+}
+
+.seers-cms-user-guide-icon {
+    margin: auto;
+}
+
+.seers-cms-user-guide-icon img {
+    width: 50px;
+    height: 50px;
+}
+
+
+.seers-cms-user-guide-heading {
+    font-size: 20px;
+    margin: 20px;
+    color: #000;
+    font-weight: 750;
+}
+
+.seers-cms-user-guide-explaination{
+    color: #938c8c;
+    width: 68%;
+    margin: auto;
+    padding-bottom: 18px;
+    color: #9AABBC;
+    font-size: 13px;
+    min-height: 114px;
+}
+
+
+.seers-cms-user-guide-button {
+    background-color: #0061fe;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    width: 120px;
+    display: inline-block;
+    border-radius: 10px;
+
+}
+
+.seers-cms-user-guide-button:hover {
+    background-color: #0061fe;
+    color: #fff;
+}
+
+/* Media Queries */
+@media (max-width: 1050px) {
+    .seers-cms-user-guide-container {
+        display: flex;
+        gap: 38px !important;
+        justify-content: center;
+        margin: 0px 20px !important;
+    }
+    .seers-cms-user-guide-explaination {
+        color: #938c8c;
+        width: 68%;
+        margin: auto;
+        padding-bottom: 30px;
+        color: #9AABBC;
+        font-size: 13px;
+        min-height: 155px;
+    }
+}
+@media (max-width: 768px) {
+    .seers-cms-user-guide-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 0px;
+    }
+
+    .seers-cms-user-guide-card {
+        width: 80%;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .seers-cms-user-guide-container {
+        gap: 0px; 
+    }
+    .seers-cms-user-guide-explaination {
+        width: 90%;
+        margin: auto;
+        padding-bottom: 30px;
+        color: #9AABBC;
+        font-size: 13px;
+    }
+    .seers-cms-user-guide-card {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .seers-cms-user-guide-icon img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .seers-cms-user-guide-button {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+}

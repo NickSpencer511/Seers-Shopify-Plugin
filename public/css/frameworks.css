@@ -1,0 +1,233 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+}
+
+.seers-cms-frameworks-container {
+    width: 95%;
+    padding: 20px;
+    margin: auto;
+    margin-top: 25px;
+}
+
+.seers-cms-frameworks-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px 40px 48px;
+}
+
+.seers-cms-frameworks-heading {
+    margin-top: 0;
+    font-size: 16px;
+}
+
+.seers-cms-frameworks-menu {
+    width: 60%;
+    margin-top: 20px;
+}
+
+.seers-cms-frameworks-setting {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.seers-cms-frameworks-setting label {
+    flex-grow: 1;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.seers-cms-frameworks-premium {
+    background-color: #9AABBC;
+    color: white;
+    font-size: 8px;
+    padding: 3px 6px;
+    border-radius: 12px;
+    margin-left: 10px;
+}
+
+.seers-cms-frameworks-info-icon {
+    width: 16px;
+    position: relative;
+    top: 5px;
+    margin-left: 20px;
+}
+
+.seers-cms-frameworks-setting input[type="checkbox"] {
+    width: 40px;
+    height: 20px;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #9AABBC;
+    outline: none;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.seers-cms-frameworks-setting input[type="checkbox"]:checked {
+    background-color: #0061FE;
+}
+
+.seers-cms-frameworks-setting input[type="checkbox"]:before {
+    content: "";
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: white;
+    transition: transform 0.2s;
+    margin: 0 !important;
+}
+
+.seers-cms-frameworks-setting input[type="checkbox"]:checked:before {
+    transform: translateX(20px);
+}
+
+.seers-cms-frameworks-save-btn {
+    background-color: #0061FE;
+    color: white;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background-color 0.3s;
+}
+
+.seers-cms-frameworks-save-btn:hover {
+    background-color: #0056b3;
+}
+
+.toggle-frameworks {
+    cursor: pointer;
+    display: inline-block;
+}
+
+.toggle-frameworks-switch {
+    display: inline-block;
+    background: #9aabbc !important;
+    border-radius: 16px;
+    width: 40px;
+    height: 20px;
+    position: relative;
+    vertical-align: middle;
+    transition: background 0.25s;
+    margin-top:5px;
+    margin-right: 5px;
+}
+.toggle-frameworks-switch:before, .toggle-frameworks-switch:after {
+    content: "";
+}
+.toggle-frameworks-switch:before {
+    display: block;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top:2px;
+    left: 2px;
+    transition: left 0.25s;
+    background:#fff;
+}
+/* .toggle-frameworks:hover .toggle-frameworks-switch:before {
+    background: linear-gradient(to bottom, #fff 0%, #fff 100%);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+} */
+.toggle-frameworks-checkbox:checked + .toggle-frameworks-switch {
+    background: #9aabbc;
+}
+.toggle-frameworks-checkbox:checked + .toggle-frameworks-switch:before {
+    left: 21px;
+    background:#0061fe;
+}
+
+.toggle-frameworks-switch.opton:before {
+    left: 21px;
+    background:#0061FE;
+}
+
+.toggle-frameworks-checkbox {
+    position: absolute;
+    visibility: hidden;
+}
+
+.toggle-frameworks-label {
+    margin-left: 5px;
+    position: relative;
+    top: 2px;
+}
+
+.tooltiphtml {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .tooltiphtml .tooltiptext {
+    visibility: hidden;
+    background-color: #555;
+      color: #fff;
+      text-align: center;
+      padding: 5px;
+      border-radius: 6px;
+      position: absolute;
+      z-index: 444;
+      font-size: 12px;
+      white-space: nowrap;
+      width: auto;
+  
+    /* Position the tooltip */
+    position: absolute;
+  }
+  
+  .tooltiphtml:hover .tooltiptext {
+    visibility: visible;
+  }
+  
+  .tooltiptext a {
+      color:#ccc;
+  }
+  
+  .tooltiptext a:hover{
+      color:#6cc04a;
+  }
+
+
+@media (max-width : 1050px) {
+    .seers-cms-frameworks-menu {
+        width: 100%;
+    }
+}
+
+
+@media (max-width : 540px) {
+    .seers-cms-frameworks-card {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 15px 10px;
+    }
+
+    .seers-cms-frameworks-setting label {
+        flex-grow: 1;
+        font-size: 13px;
+        width: 70%;
+    }
+    .seers-cms-frameworks-container {
+        width: 100%;
+        padding: 15px;
+        margin: auto;
+        margin-top: 25px;
+    }
+}
+

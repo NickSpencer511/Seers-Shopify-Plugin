@@ -1,0 +1,268 @@
+/* body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+} */
+
+.seers-cms-appearance-settings-container {
+    width: 95%;
+    padding: 20px;
+    margin: auto;
+    margin-top: 25px;
+}
+
+.seers-cms-appearance-settings-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 25px 50px;
+}
+
+.seers-cms-appearance-settings-menu {
+    width: 50%;
+}
+
+.seers-cms-appearance-settings-input-field {
+    /* width: 106px; */
+    margin: 0;
+    padding: 0;
+    height: 30px;
+}
+
+.seers-cms-appearance-settings-show-hide {
+    font-size: 12px;
+    font-weight: lighter;
+    padding-left: 5px;
+}
+
+.seers-cms-appearance-settings-setting {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.seers-cms-appearance-settings-setting label {
+    flex-grow: 1;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.seers-cms-appearance-settings-premium {
+    background-color: #9AABBC;
+    color: white;
+    font-size: 8px;
+    padding: 3px 6px;
+    border-radius: 12px;
+    margin-left: 10px;
+}
+
+.seers-cms-frameworks-info-icon {
+    width: 16px;
+    position: relative;
+    top: 5px;
+    margin-left: 20px;
+}
+
+.seers-cms-appearance-settings-setting input[type="checkbox"] {
+    width: 40px;
+    height: 20px;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #9AABBC;
+    outline: none;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.seers-cms-appearance-settings-setting input[type="checkbox"]:checked {
+    background-color: #0061FE;
+}
+
+.seers-cms-appearance-settings-setting input[type="checkbox"]:before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: white;
+    transition: transform 0.2s;
+    margin: 0px;
+}
+
+.seers-cms-appearance-settings-setting input[type="checkbox"]:checked:before {
+    transform: translateX(20px);
+}
+
+.seers-cms-appearance-settings-hr {
+    margin: 35px 0 15px;
+}
+
+.seers-cms-appearance-settings-save-btn {
+    background-color: #0061FE;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background-color 0.3s;
+    font-size: 14px;
+    font-weight:bold ;
+}
+
+.seers-cms-appearance-settings-save-btn:hover {
+    background-color: #0056b3;
+}
+
+.seers-cms-appearance-settings-dropdown-arrow {
+    width: 15px;
+    position: relative;
+    top: 3px;
+    padding-left: 5px;
+}
+
+.seers-cms-appearance-settings-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.seers-cms-appearance-settings-dropbtn {
+    background-color: #BAD5F3;
+    color: #2c7fd8;
+    padding: 8px 8px 10px;
+    font-size: 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.seers-cms-appearance-settings-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 96px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    
+}
+
+.seers-cms-appearance-settings-dropdown-content a {
+    color: #2c7fd8;
+    padding: 4px 16px;
+    font-size: 12px;
+    text-decoration: none;
+    display: block;
+}
+
+.seers-cms-appearance-settings-dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.seers-cms-appearance-settings-dropdown:hover .seers-cms-appearance-settings-dropdown-content {
+    display: block;
+}
+
+.seers-cms-appearance-settings-dropdown:hover .dropbtn {
+    background-color: #d9e4f1;
+}
+
+.seers-cms-settings-cosent-frequency {
+    background-color: #bad5f3 !important;
+    border-radius: 10px !important;
+    padding: 5px 20px 5px 20px !important;
+}
+.seers-cms-input {
+    /* background: #fff url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E) no-repeat left 80px top 55% !important; */
+}
+.seers-cms-settings-toggle-switch {
+    display: inline-block;
+    background-color: #9aabbc !important;
+    border-radius: 16px;
+    width: 40px !important;
+    height: 20px !important;
+    position: relative;
+    vertical-align: middle;
+    transition: background 0.25s;
+    margin-top: 5px;
+}
+.seers-cms-settings-toggle-checkbox:checked + .toggle-switch {
+    background: #0061fe !important;
+}
+.seers-cms-settings-toggle-switch:before {
+    display: block;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: left 0.25s;
+    background: #fff;
+}
+
+.selected {
+    background-color: #6cc04a !important;
+    color: white !important;
+}
+@media (max-width : 1050px) {
+    .seers-cms-appearance-settings-menu {
+        width: 100%;
+    }
+    .seers-cms-settings-cosent-frequency {
+        background-color: #bad5f3 !important;
+        border-radius: 10px !important;
+        padding: 5px 10px 5px 10px !important;
+    }
+    .seers-cms-input {
+        background: #fff url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E) no-repeat left 65px top 55% !important;
+    }
+}
+
+
+@media (max-width : 540px) {
+    .seers-cms-appearance-settings-card {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 15px 10px;
+    }
+    .seers-cms-settings-cosent-frequency {
+        background-color: #bad5f3 !important;
+        border-radius: 10px !important;
+        padding: 5px 10px 5px 10px !important;
+    }
+    .seers-cms-input {
+        background: #fff url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E) no-repeat left 65px top 55% !important;
+    }
+    .seers-cms-appearance-settings-setting label {
+        flex-grow: 1;
+        font-size: 13px;
+        width: 70%;
+    }
+
+    .seers-cms-frameworks-info-icon {
+        width: 16px;
+        position: relative;
+        top: 5px;
+        margin-left: 5px;
+    }
+    .seers-cms-appearance-settings-container {
+        width: 100%;
+        padding: 3px;
+        margin: auto;
+        margin-top: 25px;
+    }
+    .seers-cms-appearance-settings-input-field {
+        /* width: 96px; */
+        margin: 0;
+        padding: 0;
+    }
+}
+

@@ -1,0 +1,128 @@
+
+        /* body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        } */
+        .seers-cms-tracking-manager-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            width: 60%;
+            height: fit-content;
+            margin: auto;
+            margin-top: 15%;
+        }
+        .seers-cms-tracking-manager-icon {
+            margin-top: -80px;
+            border-radius: 50%;
+            border: 10px solid #f5f5f5;
+        }
+        .seers-cms-tracking-manager-showing-flex {
+            display: flex;
+        }
+        .seers-cms-tracking-manager-content {
+            width: 50%;
+        }
+        .seers-cms-tracking-manager-content h2 {
+            font-size: 20px;
+            font-weight: 750;
+            margin-bottom: 10px;
+        }
+        .seers-cms-tracking-manager-content p {
+            font-size: 13px;
+            color: #3c434a;
+            margin-bottom: 20px;
+        }
+        .seers-cms-tracking-manager-input-group {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .seers-cms-tracking-manager-input-group input {
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            width: 245px;
+            margin-right: 10px;
+        }
+        .seers-cms-tracking-manager-input-group button {
+            padding: 12px 28px;
+            background-color: #0061FE;
+            border: none;
+            color: #fff;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .seers-cms-tracking-manager-image {
+            width: 50%;
+            margin-left: auto;
+        }
+        .seers-cms-tracking-manager-image img {
+            width: 90%;
+            border-radius: 10px;
+            margin-left: 40px;
+        }
+        @media (max-width : 1050px) {
+            .seers-cms-tracking-manager-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            width: 90%;
+            margin-top: 70px;
+            margin-bottom: 70px;
+        }
+        }
+        
+        @media (max-width : 540px) {
+            .seers-cms-tracking-manager-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            width: 95%;
+        }
+
+            .seers-cms-tracking-manager-showing-flex {
+            display: block;
+            width: 100%;
+        }
+            .seers-cms-tracking-manager-content {
+            width: 100%;
+            position: relative;
+        }
+        .seers-cms-tracking-manager-image img {
+            width: 90%;
+            border-radius: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .seers-cms-tracking-manager-input-group {
+            display: flex;
+            margin-bottom: 20px !important;
+            margin: auto;
+        }
+        .seers-cms-tracking-manager-image {
+            width: 100%;
+            margin-left: auto;
+        }
+        }
+    

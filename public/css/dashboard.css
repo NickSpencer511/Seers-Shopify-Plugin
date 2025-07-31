@@ -1,0 +1,330 @@
+/* body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+} */
+
+.seers-cms-dashboard {
+    width: 95%;
+    margin: auto;
+    margin-top: 0px;
+    background-color: #f5f5f5;
+    padding: 15px 20px 0px;
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+}
+
+.seers-cms-dashboard h1 {
+    color: #000;
+    font-size: 24px;
+    margin-bottom: 0px;
+}
+
+.seers-cms-dashboard p {
+    color: #666;
+    margin-top: 6px;
+    font-size: 13px;
+}
+
+.seers-cms-dashboard-overview-item {
+    display: flex;
+    text-align: center;
+    width: 50%;
+    margin-left: 10%;
+}
+
+.seers-cms-dashboard-overview-item-box-identation {
+    margin-left: 10%;
+}
+
+.seers-cms-dashboard-overview-item-box-align {
+    display: flex;
+    /* justify-content: space-around; */
+    padding-top: 25px;
+}
+
+.seers-cms-dashboard-overview-align {
+    margin-left: 12px;
+}
+
+.seers-cms-dashboard-overview-text {
+    font-size: 16px !important;
+    font-weight: 600;
+    color: #000 !important;
+    margin: 20px 0px;
+    padding-top: 15px;
+}
+
+.seers-cms-dashboard-section {
+    display: flex;
+    justify-content: space-between;
+}
+
+.seers-cms-dashboard-section-options {
+    width: 48%;
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+.seers-cms-dashboard-section-video {
+    max-width: 100%;
+    padding: 8px 0px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 48%;
+    height: 270px;
+}
+
+.seers-cms-dashboard-section-video video {
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 98%;
+    height: 100%;
+}
+
+
+.seers-cms-dashboard-overview {
+    display: block;
+    justify-content: space-between;
+    margin: 0px 30px 0px;
+}
+
+.seers-cms-dashboard-overview-hr {
+    margin: 35px 30px 0px;
+}
+
+/* .seers-cms-dashboard-overview-item {
+    text-align: center;
+} */
+.seers-cms-dashboard-icon {
+    margin-right: 5px;
+}
+
+.seers-cms-dashboard-icon img {
+    width: 50px;
+    height: 50px;
+}
+
+.seers-cms-dashboard-status {
+    font-size: 13px;
+    color: #666;
+    margin-top: 12px;
+}
+
+.seers-cms-dashboard-value {
+    font-size: 13px;
+    color: #333;
+    font-weight: 600;
+    text-align: left;
+}
+
+.seers-cms-dashboard-green {
+    color: #2FCF31;
+}
+.seers-cms-dashboard-red {
+    color: red;
+}
+
+.seers-cms-dashboard-actions {
+    display: flex;
+    /* justify-content: center; */
+    padding: 20px 30px;
+}
+
+.seers-cms-dashboard-btn {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+.seers-cms-dashboard-customize {
+    background-color: #fff;
+    color: #0061FE;
+    border: 1px solid #0061FE;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.seers-cms-dashboard-spremium {
+    background-color: #0061FE;
+    color: #fff;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.seers-cms-dashboard-recent-logs {
+    text-align: center;
+    margin: 40px 0px 20px 0px;
+    display: flex;
+    background-color: #fff;
+    padding: 12px 26px 12px 25px;
+    border-radius: 5px;
+}
+
+.seers-cms-dashboard-recent-logs p {
+    font-size: 13px;
+    color: #333;
+    font-weight: bold;
+}
+
+.seers-cms-dashboard-recent-logs .seers-cms-dashboard-premium {
+        background-color: #d3d3d3;
+        color: white;
+        font-size: 8px;
+        padding: 3px 6px;
+        border-radius: 12px;
+        margin-left: 20px;
+}
+
+.seers-cms-dashboard-recent-logs-img {
+    width: 20px;
+    height: 18px;
+    margin-left: auto;
+    position: relative;
+    top: 0cqmin;
+}
+
+.seers-cms-dashboard-general-premium {
+    background-color: #9AABBC;
+    color: white;
+    font-size: 7px;
+    padding: 5px 6px;
+    border-radius: 12px;
+    margin-left: 15px;
+    position: relative;
+    top: -2px;
+}
+
+
+@media (max-width : 1600px) {
+    .seers-cms-dashboard-overview-item {
+        display: flex;
+        text-align: center;
+        width: 50%;
+        margin-left: 3%;
+    }
+    
+    .seers-cms-dashboard-overview-item-box-identation {
+        margin-left: 10%;
+    } 
+}
+@media (max-width : 1400px) {
+    .seers-cms-dashboard-overview-item {
+        display: flex;
+        text-align: center;
+        width: 50%;
+        margin-left: 7%;
+    }
+    
+    .seers-cms-dashboard-overview-item-box-identation {
+        margin-left: 10%;
+    } 
+}
+
+
+@media (max-width : 1100px) {
+    .seers-cms-dashboard-overview-item {
+        display: flex;
+        text-align: center;
+        width: 50%;
+        margin-left: 3%;
+    }
+    
+    .seers-cms-dashboard-overview-item-box-identation {
+        margin-left: 10%;
+    } 
+}
+
+
+@media (max-width : 1050px) {
+    .seers-cms-dashboard-section {
+        display: block;
+    }
+    .seers-cms-dashboard-section-options {
+        width: 100%;
+        background-color: #fff;
+        border-radius: 5px;
+    }
+    .seers-cms-dashboard-section-video {
+        max-width: 100%;
+        padding: 8px 0px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-top: 20px;
+    }
+    .seers-cms-dashboard-overview-item {
+        display: flex;
+        text-align: center;
+        width: 50%;
+        margin-left: 16%;
+    }
+    
+    .seers-cms-dashboard-overview-item-box-identation {
+        margin-left: 10%;
+    } 
+}
+
+@media (max-width : 830px) {
+    .seers-cms-dashboard-overview-item {
+        display: flex;
+        text-align: center;
+        width: 50%;
+        margin-left: 10%;
+    }
+}
+
+@media (max-width: 780px) {
+    .seers-cms-dashboard-overview-item {
+        display: flex;
+        text-align: center;
+        width: 50%;
+        margin-left: 12%;
+    }
+}
+
+@media (max-width : 440px) {
+    .seers-cms-dashboard-overview {
+        display: block;
+        justify-content: space-between;
+        margin: 10px 11px 12px;
+    }
+    .seers-cms-dashboard-overview-item {
+        display: flex;
+        text-align: center;
+        width: 50%;
+        margin-left: 2%;
+    }
+    .seers-cms-dashboard-actions {
+        display: flex;
+        justify-content: center;
+        padding: 20px 7px;
+    }
+    
+    .seers-cms-dashboard-overview-item-box-identation {
+        margin-left: 3%;
+    } 
+
+    .seers-cms-dashboard-overview-align {
+        margin-left: 6px;
+    }
+    .seers-cms-dashboard {
+        width: 96%;
+        margin: auto;
+        margin-top: 15px;
+        background-color: #f5f5f5;
+        padding: 0px;
+        /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+    }
+}

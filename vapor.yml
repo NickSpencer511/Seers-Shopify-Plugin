@@ -1,0 +1,37 @@
+id: 58178
+name: seers-shopify-plugin-api-frankfurt
+environments:
+    production:
+        domain: gdpr-cookie-consent-banner-cookie-notice-seers.seersco.com
+        subnets:
+            - subnet-0b98363ea9b142b85
+            - subnet-05d0603d6f4ae2d12
+        security-groups:
+            - sg-03ddc5a8452b52244
+        memory: 1024
+        cli-memory: 512
+        paths:
+            storage: storage.seersco.com
+        gateway-version: 2
+        warm: 1
+        runtime: php-8.3:al2
+        build:
+            - 'composer install --no-dev'
+            - 'php artisan event:cache'
+    staging:
+        # domain: gdpr-cookie-consent-banner-cookie-notice-seers.seersco.com
+        subnets:
+            - subnet-05d0603d6f4ae2d12
+            - subnet-0b98363ea9b142b85
+        security-groups:
+            - sg-03ddc5a8452b52244
+        memory: 1024
+        cli-memory: 512
+        paths:
+            storage: storage.seersco.com
+        gateway-version: 2
+        warm: 1
+        runtime: 'php-8.3:al2'
+        build:
+            - 'composer install --no-dev'
+            - 'php artisan event:cache'

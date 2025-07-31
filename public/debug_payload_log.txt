@@ -1,0 +1,36 @@
+Payload: Array
+(
+    [message] => Banner Settings
+    [bannersettings] => Array
+        (
+            [id] => 15750
+            [has_badge] => 0
+            [allow_reject] => 1
+            [is_cookie_banner] => 1
+            [agreement_expire] => 0
+            [btn_disagree_title] => Disable All
+            [btn_agree_title] => Allow All
+            [body] => We use cookies to personalize content and ads, Sohaib.786
+            [btn_preference_title] => Preference
+        )
+
+    [bannersettingsbanners] => Array
+        (
+            [body_text_color] => #ffffff
+            [agree_btn_color] => #3B6EF8
+            [disagree_btn_color] => #3B6EF8
+            [preferences_btn_color] => #FFFFFF
+            [agree_text_color] => #FFFFFF
+            [disagree_text_color] => #FFFFFF
+            [preferences_text_color] => #000000
+            [banner_bg_color] => #FFFFFF
+            [position] => seers-cmp-banner-bar
+            [font_style] => arial
+            [font_size] => 12
+            [button_type] => cbtn_default
+        )
+
+    [platform] => custom
+)
+
+API Response: {"message":"Banner settings updated successfully"}

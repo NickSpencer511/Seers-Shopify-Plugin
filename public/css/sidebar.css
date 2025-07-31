@@ -1,0 +1,466 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background-color: #f5f5f5;
+  }
+  
+  .seers-cms-sidebar {
+    width: 250px;
+    background-color: #fff;
+    color: #4285f4;
+    /* position: fixed;
+    top: 0;
+    left: 0; */
+    min-height: 88vh;
+    overflow-y: scroll;
+    padding-bottom: 32px;
+    transition: left 0.3s ease-in-out;
+    height: auto;
+  }
+  ::-webkit-scrollbar {
+    width: 0px !important;
+    background: transparent;
+  }
+  
+  .seers-cms-sidebar.active {
+    left: 0;
+  }
+  
+  .seers-cms-sidebar-header {
+    padding: 0px 20px 0px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+  
+  .seers-cms-sidebar-heading {
+    font-size: 16px;
+    font-weight: 300;
+    color: rgb(54, 51, 51);
+  }
+  
+  .seers-cms-sidebar-close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: rgb(54, 51, 51);
+    position: absolute;
+    top: 5px;
+    right: 20px;
+    display: none; /* Hide by default */
+  }
+  
+  .seers-cms-sidebar-menu {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+  }
+  
+  .seers-cms-sidebar-menu-extras {
+  margin-top: 10px;
+  }
+  
+  .seers-cms-sidebar-menu li {
+    padding: 10px 0px 13px 18px;
+  }
+  
+  .seers-cms-sidebar-menu-options.active {
+    background-color: #ECF1FF;
+    color: white;
+    border-radius: 0px;
+  }
+  
+  .seers-cms-sidebar-menu li.active a {
+    color: #0061FE;
+    box-shadow: none !important;
+  }
+  
+  /* .seers-cms-sidebar-menu li.active a .seers-cms-sidebar-icon {
+    filter: brightness(0) invert(1); 
+  } */
+  
+  .seers-cms-sidebar-menu li a {
+    color: #4f4f4f;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    font-weight: 400;
+    box-shadow: none !important;
+  }
+  
+  .seers-cms-sidebar-consent-banner-expand li {
+    padding: 10px 0px 13px 32px;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+  }
+  
+  .seers-cms-sidebar-consent-banner-expand li a {
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    box-shadow: none !important;
+  }
+  .seers-cms-sidebar-appearance-expand li {
+    padding: 10px 0px 13px 55px;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+  }
+  
+  .seers-cms-sidebar-appearance-expand li a {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+  }
+  
+  .seers-cms-sidebar-icon {
+    width: 20px;
+    position: relative;
+    top: 5px;
+  }
+  
+  .seers-cms-sidebar-icon-expand {
+    width: 7px;
+    height: 14px;
+    position: relative;
+    top: 1px;
+  }
+  
+  .seers-cms-sidebar-options {
+    padding: 0px 0px 0px 15px;
+  }
+  
+  
+  .seers-cms-sidebar-footer {
+    width: 105px;
+    margin: auto;
+    display: flex;
+    gap: 23px;
+    justify-content: space-between;
+  }
+  
+  .seers-cms-sidebar-footer svg {
+    width: 10px;
+  }
+  
+  .seers-cms-toggle-button {
+    /* position: absolute;
+    top: 20px;
+    left: 20px; */
+    background-color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    display: none;
+    margin-left: 8px;
+    border-radius: 5px;
+  }
+  
+  /* .seers-cms-sidebar-extras {
+    color: rgb(54, 51, 51);
+    padding: 40px 0px 20px 10px !important;
+  } */
+  
+  .seers-cms-toggle-button.active {
+    display: none;
+  }
+  
+  .seers-cms-toggle-button span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background-color: #3477c4;
+    margin: 4px 0;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .seers-cms-toggle-button .active {
+    display: none;
+  }
+  
+  .seers-cms-sidebar-borders {
+    border-top: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
+    margin: 28px 20px;
+  }
+  
+  .seers-cms-sidebar-links a{
+    color: #4F4F4F !important;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+  }
+  
+  .seers-cms-social-links {
+    width: 18px;
+  }
+  
+  .seers-cms-sidebar-dropdown-blue {
+    width: 20px;
+    float: right;
+    position: relative;
+    top: 8px;
+    right: 14px;
+  }
+  .seers-cms-sidebar-consent-banner-expand {
+    display: none;
+  }
+  .seers-cms-sidebar-consent-banner-expand.active {
+    display: block;
+  }
+  
+  .seers-cms-sidebar-appearance-expand {
+    display: none;
+  }
+  
+  .seers-cms-sidebar-appearance-expand.active {
+    display: block;
+  }
+  
+  @media screen and (max-width: 1050px) {
+    /* .seers-cms-sidebar {
+      width: 330px;
+      background-color: #fff;
+      color: #4285f4;
+      position: fixed;
+      top: 130px;
+      left: 0;
+      display: none;
+      border-right: 2px solid black;
+      height: 100vh;
+      transition: left 0.3s ease-in-out;
+    }
+  
+    .seers-cms-sidebar.active {
+      width: 270px;
+      background-color: #fff;
+      color: #4285f4;
+      position: absolute;
+      top: 105px;
+      left: 0;
+      display: block;
+      border-right: 0px solid black;
+      height: 100vh;
+      transition: left 0.3s ease-in-out;
+    }
+  
+    .seers-cms-sidebar-close-button {
+      display: block;
+    }
+  
+    .seers-cms-toggle-button {
+      display: block;
+    }
+    .seers-cms-privacy-policy-container {
+      display: flex;
+      gap: 20px !important;
+      justify-content: center;
+      margin: 0px 20px !important;
+  } */
+  .seers-cms-sidebar-header {
+    padding: 0px 0px 0px 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+  .seers-cms-sidebar {
+    width: 330px;
+    background-color: #fff;
+    color: #4285f4;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+    border-right: 2px solid black;
+    height: 100vh;
+    transition: left 0.3s ease-in-out;
+  }
+  
+  .seers-cms-sidebar.active {
+    width: 230px;
+    background-color: #fff;
+    color: #4285f4;
+    position: absolute;
+    top: 130px;
+    left: 0;
+    display: block;
+    border-right: 0px solid black;
+    height: 100vh;
+    transition: left 0.3s ease-in-out;
+    z-index: 999;
+  }
+  .seers-cms-sidebar-close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: rgb(54, 51, 51);
+    position: relative;
+    /* right: 20px; */
+    display: block; 
+    margin-left: auto;
+    left: -8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .seers-cms-toggle-button {
+    display: block;
+  }
+  }
+  @media screen and (max-width: 840px) {
+    .seers-cms-sidebar-header {
+      padding: 0px 0px 0px 0px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+  }
+    .seers-cms-sidebar {
+      width: 330px;
+      background-color: #fff;
+      color: #4285f4;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: none;
+      border-right: 2px solid black;
+      height: 100vh;
+      transition: left 0.3s ease-in-out;
+    }
+  
+    .seers-cms-sidebar.active {
+      width: 230px;
+      background-color: #fff;
+      color: #4285f4;
+      position: absolute;
+      top: 95px;
+      left: 0;
+      display: block;
+      border-right: 0px solid black;
+      height: 100vh;
+      transition: left 0.3s ease-in-out;
+      z-index: 999;
+    }
+    .seers-cms-sidebar-close-button {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: rgb(54, 51, 51);
+      position: relative;
+      /* right: 20px; */
+      display: block; 
+      margin-left: auto;
+      left: -8px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+  }
+    
+    .seers-cms-toggle-button {
+      display: block;
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    .seers-cms-sidebar-header {
+      padding: 0px 0px 0px 0px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+  }
+    .seers-cms-sidebar {
+      width: 330px;
+      background-color: #fff;
+      color: #4285f4;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: none;
+      border-right: 2px solid black;
+      height: 100vh;
+      transition: left 0.3s ease-in-out;
+    }
+  
+    .seers-cms-sidebar.active {
+      width: 230px;
+      background-color: #fff;
+      color: #4285f4;
+      position: absolute;
+      top: 76px;
+      left: 0;
+      display: block;
+      border-right: 0px solid black;
+      height: 100vh;
+      transition: left 0.3s ease-in-out;
+      z-index: 999;
+    }
+    .seers-cms-sidebar-close-button {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: rgb(54, 51, 51);
+      position: relative;
+      /* right: 20px; */
+      display: block; 
+      margin-left: auto;
+      left: -8px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+  }
+    
+    .seers-cms-toggle-button {
+      display: block;
+    }
+  }
+    @media screen and (max-width: 440px) {
+      .seers-cms-sidebar-header {
+        padding: 0px 0px 0px 0px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+      }
+      .seers-cms-sidebar {
+        width: 330px;
+        background-color: #fff;
+        color: #4285f4;
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: none;
+        border-right: 2px solid black;
+        height: 100vh;
+        transition: left 0.3s ease-in-out;
+      }
+    
+      .seers-cms-sidebar.active {
+        width: 230px;
+        background-color: #fff;
+        color: #4285f4;
+        position: absolute;
+        top: 76px;
+        left: 0;
+        display: block;
+        border-right: 0px solid black;
+        height: 100vh;
+        transition: left 0.3s ease-in-out;
+        z-index: 999;
+      }
+      .seers-cms-sidebar-close-button {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: rgb(54, 51, 51);
+        position: relative;
+        /* top: -2px; */
+        left: -4px;
+        margin-left: auto;
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+    }  
+  
