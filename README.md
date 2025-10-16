@@ -115,11 +115,11 @@ IAB TCF 2.2
 
 2. Our cb.js script manages banner behaviour and consent events:
 
-Shopify.customerPrivacy.setTrackingConsent({
-  analytics: true,
-  marketing: false,
-  preferences: true
-});
+    Shopify.customerPrivacy.setTrackingConsent({
+    analytics: true,
+    marketing: false,
+    preferences: true
+    });
 
 
 3. The user’s consent choice automatically updates Shopify’s internal tracking logic.
