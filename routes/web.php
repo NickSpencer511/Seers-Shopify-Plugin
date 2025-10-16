@@ -124,6 +124,7 @@ Route::get('/', function () {
                 //active this plugin
                 $cf_obj->plugin_active_inactive($fields, 1);
                 $cf_obj->snippest_insert($shop, $token, $domain, $email);
+                $cf_obj->insertConsentTrackingScript($shop, $token);
                 header('Location: ' . config('app.url_user') . '?shop=' . $shop);
                 exit;
             }

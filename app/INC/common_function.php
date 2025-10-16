@@ -640,7 +640,41 @@ class common_function {
         // echo "</pre>";
 
     }
-    
+
+    public function insertConsentTrackingScript($shop, $token)
+    {
+        $consentScriptUrl = "https://cdn.shopify.com/shopifycloud/consent-tracking-api/v0.1/consent-tracking-api.js";
+
+        $existingTags = $this->prepare_api_condition(['script_tags'], [], 'GET', 0, $token, $shop);
+        $scriptExists = false;
+
+        if (!empty($existingTags['body']['script_tags'])) {
+            foreach ($existingTags['body']['script_tags'] as $tag) {
+                if (!empty($tag['src']) && strcasecmp($tag['src'], $consentScriptUrl) === 0) {
+                    $scriptExists = true;
+                    break;
+                }
+            }
+        }
+
+        if (!$scriptExists) {
+            $payload = [
+                'script_tag' => [
+                    'event' => 'onload',
+                    'src' => $consentScriptUrl,
+                    'display_scope' => 'online_store',
+                ],
+            ];
+
+            $response = $this->prepare_api_condition(['script_tags'], $payload, 'POST', 0, $token, $shop);
+
+            return $response;
+        }
+
+        return "Already exists";
+    }
+
+
     public function plugin_active_inactive($shopdetail, $isative = 0){
         $postData = array(
             'domain' => $shopdetail['shop'],

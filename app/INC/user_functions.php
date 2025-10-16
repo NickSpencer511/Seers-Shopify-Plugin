@@ -214,6 +214,9 @@ class User_functions extends common_function {
             if($banner_status=='1'){
                 $jsonresponse = array('result' => 'success', 'key'=>$user_key, 'msg' => "<p><span class ='banner-tick'></span>Banner is enabled on your store. <br> <span style='margin-left:18px;'></span>Please refresh your store home page to see the effect.</p>");
                 $this->snippest_insert($shop, $token, $domain, $email);
+                $this->insertConsentTrackingScript($shop, $token);
+
+                
           }else{
               $jsonresponse = array('result' => 'success', 'key'=>$user_key, 'msg' => 'Banner is disabled on your store');
                 $this->remove_code();
