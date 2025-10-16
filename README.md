@@ -5,6 +5,7 @@ Seers AI GDPR Cookie Banner is a Shopify Consent Management Platform (CMP) desig
 Developed by Seers.ai
 , this AI-powered solution automatically manages consent preferences, blocks cookies before consent, and syncs data with Shopify’s Consent Tracking API for accurate privacy compliance.
 
+
 ⚙️ Key Features
 
 ✅ 1-Click Setup – Instantly integrate the consent banner without coding.
@@ -19,6 +20,7 @@ Developed by Seers.ai
 
 🎨 Customisable Banner – Match your store’s branding with flexible styling and positioning options.
 
+
 🧩 Integrations – Works seamlessly with:
 
 Google Tag Manager
@@ -32,6 +34,7 @@ TikTok Pixel
 Microsoft Consent Mode v2
 
 IAB TCF 2.2 Framework
+
 
 🧩 How Shopify Consent API Integration Works
 
@@ -60,6 +63,7 @@ Third-party tags (like GA4, Meta, TikTok) follow Shopify’s consent rules autom
 
 This real-time communication ensures that your store always respects user privacy settings across all integrated platforms.
 
+
 🔐 Compliance Workflow
 
 Banner Displayed:
@@ -77,9 +81,11 @@ Cookies are auto-blocked or allowed based on the user’s choices, ensuring zero
 Audit & Reporting:
 All consent decisions are logged and made available in compliance reports under your Seers dashboard.
 
+
 🌐 Supported Languages
 
 Arabic, Bulgarian, Czech, Danish, Chinese (Simplified), Chinese (Traditional), Croatian, Dutch, English, Estonian, Finnish, French, German, Greek, Hungarian, Irish, Italian, Latvian, Lithuanian, Maltese, Polish, Portuguese (Brazil), Portuguese (Portugal), Romanian, Slovak, Slovenian, Spanish, Swedish, and Turkish.
+
 
 🧩 Works With
 
@@ -99,6 +105,7 @@ TikTok Pixel
 
 IAB TCF 2.2
 
+
 📊 Example Consent Flow
 
 1. On install, the app loads Shopify’s Consent Tracking API script:
@@ -117,6 +124,7 @@ Shopify.customerPrivacy.setTrackingConsent({
 
 3. The user’s consent choice automatically updates Shopify’s internal tracking logic.
 
+
 🚀 Why Choose Seers?
 
 Certified Microsoft & Google CMP Partner
@@ -128,6 +136,7 @@ Delivers AI-powered consent automation
 Provides audit-ready compliance reporting
 
 Backed by a global privacy compliance team
+
 
 🛡️ Legal Coverage
 
@@ -143,6 +152,7 @@ PIPEDA (Canada)
 
 150+ Other Regional Privacy Laws
 
+
 📘 Developer Notes
 
 For developers integrating Seers with Shopify apps:
@@ -154,6 +164,7 @@ cb.js handles consent UI logic.
 window.Shopify.loadFeatures() ensures the Customer Privacy API is ready before consent data sync.
 
 No manual script insertion is required.
+
 
 📞 Support
 
