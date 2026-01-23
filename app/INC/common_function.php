@@ -641,6 +641,74 @@ class common_function {
 
     }
 
+    public function snippest_insert_v2($shop, $token, $domain, $email) {
+
+        $selected_field = 'data_key';
+        $where = ['shop' => $shop, 'status' => '1'];
+        $store_row_rs = $this->select_row(config('app.table_user_stores'), $selected_field, $where);
+
+        $store_row = (count($store_row_rs) > 0 && !empty($store_row_rs[0]->email)) 
+            ? (array) $store_row_rs[0] 
+            : ((!$store_row_rs->isEmpty()) ? (array) $store_row_rs[0] : []);
+
+        $datakey = $store_row['data_key'] ?? '';
+
+        $response = $this->get_data_key($domain, $email);
+        $datakey   = $response['key'] ?? $datakey;
+        $domain_id = $response['domain_id'] ?? '';
+        $user_id   = $response['user_id'] ?? '';
+        $scriptbaseurl = $response['cdnbaseurl'] ?? "https://cdn.seersco.com/";
+
+        $fields = [
+            'data_key' => $datakey,
+            'domain_id' => $domain_id,
+            'user_id' => $user_id
+        ];
+        $this->update(config('app.table_user_stores'), $fields, ['shop' => $shop]);
+
+        if(!empty($user_id) && !empty($domain_id)) {
+            $cb_js_url = $scriptbaseurl . 'banners/' . $user_id . '/' . $domain_id . '/cb.js?param=' . $datakey . '&name=CookieXray&shop=' . $shop;
+        } else {
+            $cb_js_url = 'https://cdn.seersco.com/banners/default/default/cb.js?param=' . $datakey . '&name=CookieXray&shop=' . $shop;
+        }
+
+        $allscriptags = $this->prepare_api_condition(['script_tags'], [], 'GET', '0', $token, $shop);
+
+        $script_exists = false;
+
+        if(!empty($allscriptags['body']['script_tags'])) {
+            foreach ($allscriptags['body']['script_tags'] as $thescript) {
+
+                if(strpos($thescript['src'], 'cdn.seersco.com/banners/') !== false && strpos($thescript['src'], '/cb.js') !== false) {
+                    preg_match('#banners/([0-9]+)/([0-9]+)/cb\.js\?param=([^&]+)#', $thescript['src'], $m);
+
+                    if(!empty($m) && ($m[1] != $user_id || $m[2] != $domain_id || urldecode($m[3]) != $datakey)) {
+                        $this->prepare_api_condition(['script_tags', $thescript['id']], [], 'DELETE', '0', $token, $shop);
+                        continue;
+                    }
+
+                    if(!empty($m) && $m[1] == $user_id && $m[2] == $domain_id && urldecode($m[3]) == $datakey) {
+                        $script_exists = true;
+                    }
+                }
+            }
+        }
+
+        if(!$script_exists) {
+            $this->prepare_api_condition(['script_tags'], [
+                'script_tag' => [
+                    'event' => 'onload',
+                    'src' => $cb_js_url,
+                    'display_scope' => 'online_store',
+                    'attributes' => ['data-shopify-cmp' => '']
+                ]
+            ], 'POST', '0', $token, $shop);
+        }
+
+        return $allscriptags;
+    }
+
+
     public function insertConsentTrackingScript($shop, $token)
     {
         $consentScriptUrl = "https://cdn.shopify.com/shopifycloud/consent-tracking-api/v0.1/consent-tracking-api.js";

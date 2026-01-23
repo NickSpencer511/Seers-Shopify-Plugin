@@ -124,8 +124,8 @@ class User_functions extends common_function {
 
     public function change_appStatus(){
 
-        $cf_obj = new common_function();
         $shop = isset($_POST['shop']) ? $_POST['shop'] : $_GET['shop'];
+        $cf_obj = new common_function($shop);
         $store_user_id = $this->store_user_id;
         $data_status = $_POST['data_status'];
         $user_domain   = $_POST['user_name'];
@@ -252,10 +252,10 @@ class User_functions extends common_function {
     }
 
     public function get_user_data() {
-        $cf_obj = new common_function();
+        $domain = isset($_POST['domain']) ? $_POST['domain'] : null;
+        $cf_obj = new common_function($domain);
 
         $shop = isset($_POST['shop']) ? $_POST['shop'] : $_GET['shop'];
-        $domain = isset($_POST['domain']) ? $_POST['domain'] : null;
         $email = isset($_POST['email']) ? $_POST['email'] : null;
         $token = isset($_POST['token']) ? $_POST['token'] : null;
     
@@ -326,13 +326,15 @@ class User_functions extends common_function {
     }
 
     public function update_user_data() {
-        $cf_obj = new common_function();
+        $domain = isset($_POST['domain']) ? $_POST['domain'] : null;
+        $cf_obj = new common_function($domain);
     
         $shop = isset($_POST['shop']) ? $_POST['shop'] : $_GET['shop'];
-        $domain = isset($_POST['domain']) ? $_POST['domain'] : null;
         $email = isset($_POST['email']) ? $_POST['email'] : null;
         $data = isset($_POST['data']) ? $_POST['data'] : null;
         $token = isset($_POST['token']) ? $_POST['token'] : null;
+        $domain_id = $_POST['domain_id'] ?? '';
+        $user_id = $_POST['user_id'] ?? '';
     
         $payload = [
             'data' => $data,
@@ -377,10 +379,14 @@ class User_functions extends common_function {
         $api_response = json_decode($response, true);
     
         if (json_last_error() === JSON_ERROR_NONE) {
+            $allscript = $cf_obj->snippest_insert_v2($shop, $token, $domain, $email);
             return [
                 'status' => 'success',
                 'message' => 'Changes Saved Successfully',
-                'data' => $api_response
+                'data' => $api_response,
+                'token' => $token,
+                'shop' => $shop,
+                'allscript' => $allscript,
             ];
         } else {
             return [
