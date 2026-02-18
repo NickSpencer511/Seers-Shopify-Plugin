@@ -36,6 +36,10 @@ class UserController extends Controller
                 exit;
             }
 
+            if (!empty($current_user['token']) && !empty($current_user['user_id']) && !empty($current_user['domain_id'])) {
+                $uf_obj->ensure_metafield_exists($shop, $current_user['token']);
+            }
+
             $devmode = 'dev';
             
             if (stripos($siteurl, 'gdpr-cookie-consent-banner-cookie-notice-seers') === false) {

@@ -22,6 +22,96 @@ class User_functions extends common_function {
     public function __call($method, $args) {
         return true;
     }
+    /**
+ * Check if the app embed is active on the storefront.
+ */
+public function check_embed_enabled($shop, $token = null) {
+    // 1. Quick storefront check
+    $store_url = "https://" . $shop;
+    $ch = curl_init($store_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    $homepage = curl_exec($ch);
+    curl_close($ch);
+
+    if ($homepage && strpos($homepage, 'data-shopify-cmp') !== false) {
+        return true;
+    }
+
+    // 2. Fallback: Theme API check (if token provided)
+    if ($token) {
+        $themes = $this->prepare_api_condition(['themes'], ['role' => 'main'], 'GET', 0, $token, $shop);
+        if (!empty($themes['body']['themes'][0]['id'])) {
+            $theme_id = $themes['body']['themes'][0]['id'];
+            $asset = $this->prepare_api_condition(
+                ['themes', $theme_id, 'assets'],
+                ['asset' => ['key' => 'layout/theme.liquid']],
+                'GET',
+                0,
+                $token,
+                $shop
+            );
+            $content = $asset['body']['asset']['value'] ?? '';
+            if (strpos($content, 'data-shopify-cmp') !== false ||
+                strpos($content, 'seers-cmp-embed') !== false) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+/**
+ * Generate deep link to theme editor with app embed activation.
+ */
+public function get_theme_editor_url($shop, $token) {
+    $themes = $this->prepare_api_condition(['themes'], ['role' => 'main'], 'GET', 0, $token, $shop);
+    if (empty($themes['body']['themes'][0]['id'])) {
+        return null;
+    }
+    $theme_id = $themes['body']['themes'][0]['id'];
+    $app_id = config('app.shopify_app_id');        // add to config/app.php
+    $block_handle = 'seers-cmp-embed';             // from shopify.app.toml
+    return "https://$shop/admin/themes/$theme_id/editor?context=apps&activateAppId=$app_id/$block_handle";
+}
+
+/**
+ * Remove all Seers‑related ScriptTags.
+ */
+public function remove_all_script_tags($shop, $token) {
+    $all = $this->prepare_api_condition(['script_tags'], [], 'GET', '0', $token, $shop);
+    if (!empty($all['body']['script_tags'])) {
+        foreach ($all['body']['script_tags'] as $tag) {
+            if (stripos($tag['src'], 'seersco.com') !== false ||
+                stripos($tag['src'], 'cdn.seersco.com') !== false ||
+                stripos($tag['src'], 'cb.js') !== false) {
+                $this->prepare_api_condition(['script_tags', $tag['id']], [], 'DELETE', '0', $token, $shop);
+            }
+        }
+    }
+    return true;
+}
+
+/**
+ * Update embed_enabled flag in database.
+ */
+public function set_embed_enabled($shop, $enabled = 1) {
+    return $this->update(config('app.table_user_stores'), ['embed_enabled' => $enabled], ['shop' => $shop]);
+}
+
+/**
+ * Ensure metafield exists for existing stores (called on dashboard load).
+ */
+public function ensure_metafield_exists($shop, $token) {
+    $store = $this->get_store_detail_obj();
+    if (!empty($store['user_id']) && !empty($store['domain_id']) && !empty($store['data_key'])) {
+        $scriptbaseurl = "https://cdn.seersco.com/";
+        $script_url = $scriptbaseurl . 'banners/' . $store['user_id'] . '/' . $store['domain_id'] . '/cb.js?param=' . $store['data_key'] . '&name=CookieXray&shop=' . $shop;
+        $this->set_shop_metafield($shop, $token, 'cmp_script_url', $script_url, 'seers', 'string');
+    }
+}
 
     public function remove_code($storeuserid = 0, $curshop = '') {
        

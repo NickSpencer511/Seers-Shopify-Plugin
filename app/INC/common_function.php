@@ -790,4 +790,19 @@ class common_function {
         return str_replace($search, $replace, $value);
     }
 
+    /**
+     * Set a shop metafield using Shopify Admin API.
+     */
+    public function set_shop_metafield($shop, $token, $key, $value, $namespace = 'seers', $type = 'string') {
+        $metafield = [
+            'metafield' => [
+                'namespace' => $namespace,
+                'key' => $key,
+                'value' => $value,
+                'type' => $type
+            ]
+        ];
+        return $this->prepare_api_condition(['metafields'], $metafield, 'POST', 0, $token, $shop);
+    }
+
 }

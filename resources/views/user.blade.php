@@ -78,6 +78,25 @@
         <div class="loadingoverlay">
             <div class="loader"></div>
         </div>
+        <!-- Upgrade banner for embed -->
+<div id="embed-setup-banner" class="Polaris-Banner Polaris-Banner--statusWarning" style="display: none;">
+    <div class="Polaris-Banner__Content">
+        <h2 class="Polaris-Heading">Upgrade to faster synchronous loading</h2>
+        <p>Enable the new app embed to ensure our script runs before any third-party scripts, improving consent management.</p>
+        <button id="enable-embed-btn" class="Polaris-Button Polaris-Button--primary">
+            Enable now in theme editor
+        </button>
+        <p class="note">After enabling, refresh this page.</p>
+    </div>
+</div>
+
+<!-- Optional cleanup banner -->
+<div id="cleanup-scripts-banner" class="Polaris-Banner Polaris-Banner--statusInfo" style="display: none;">
+    <div class="Polaris-Banner__Content">
+        <p>The embed is active, but we detected old script tags. You can remove them for a cleaner setup.</p>
+        <button id="cleanup-scripts-btn" class="Polaris-Button">Remove old scripts</button>
+    </div>
+</div>
         <div>
             @include('components.sidebar')
         </div>
@@ -232,19 +251,81 @@
         window.open('https://seers.ai/price-plan', '_blank');
     });
 
-
     $(document).ready(function() {
         var currentUser = <?php echo json_encode($current_user); ?>;
-        // console.log(currentUser);
         var user_doamin = $('#user_doamin').val();
         var user_email = $('#user_email').val();
         var data_key = $('#user_key').val();
         var token = currentUser['token'];
-        
-        getUserData(switchStatus, user_doamin, user_email, data_key, token);
-    });
 
-    
+        // Call existing function (preserve it)
+        if (typeof getUserData === 'function') {
+            getUserData(switchStatus, user_doamin, user_email, data_key, token);
+        }
+
+        // --- New embed checks ---
+        // Check embed status on page load
+        $.ajax({
+            url: siteapiactionurl,
+            method: 'POST',
+            data: {
+                method_name: 'check_embed_enabled',   // changed from 'action'
+                shop: shop,
+                token: token
+            },
+            success: function(response) {
+                if (response.enabled) {
+                    $('#embed-setup-banner').hide();
+                    // If embed is enabled but database flag is 0, show cleanup option
+                    if (currentUser.embed_enabled == 0) {
+                        $('#cleanup-scripts-banner').show();
+                    }
+                } else {
+                    $('#embed-setup-banner').show();
+                }
+            }
+        });
+
+        // Handle "Enable now" button
+        $(document).on('click', '#enable-embed-btn', function() {
+            $.ajax({
+                url: siteapiactionurl,
+                method: 'POST',
+                data: {
+                    method_name: 'get_theme_editor_url',   // changed
+                    shop: shop,
+                    token: token
+                },
+                success: function(response) {
+                    if (response.url) {
+                        window.open(response.url, '_blank');
+                        alert('After enabling the embed in the theme editor, please refresh this page.');
+                    } else {
+                        alert('Could not generate editor URL.');
+                    }
+                }
+            });
+        });
+
+        // Handle cleanup button
+        $(document).on('click', '#cleanup-scripts-btn', function() {
+            $.ajax({
+                url: siteapiactionurl,
+                method: 'POST',
+                data: {
+                    method_name: 'remove_old_scripts',   // changed
+                    shop: shop,
+                    token: token
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert('Old scripts removed successfully.');
+                        $('#cleanup-scripts-banner').hide();
+                    }
+                }
+            });
+        });
+    });
 </script>
 
 

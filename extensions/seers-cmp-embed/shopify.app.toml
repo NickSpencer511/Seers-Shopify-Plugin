@@ -1,0 +1,8 @@
+[[extensions]]
+type = "theme_app_extension"
+name = "Seers CMP"
+handle = "seers-cmp-embed"
+
+[[extensions.targeting]]
+target = "theme"
+module = "./blocks/app_embed.liquid"

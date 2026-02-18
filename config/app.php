@@ -203,4 +203,6 @@ return [
     'url_user' => env('APP_URL', 'http://localhost') . 'user/',
     'url_assets' => env('APP_URL', 'http://localhost') . 'assets/',
 
+    'shopify_app_id' => env('SHOPIFY_APP_ID', '3150213'),
+
 ];

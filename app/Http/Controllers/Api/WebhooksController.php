@@ -388,19 +388,32 @@ class WebhooksController extends Controller
     }
 
     public function AjaxAction (Request $request) {
-
         $is_bad_shop = 0;
         if (isset($_POST['shop']) && $_POST['shop'] != '') {
-            
-            
             $uf_obj = new User_functions($_POST['shop']);
-
             $current_user = $uf_obj->get_store_detail_obj();
 
             if (!empty($current_user)) {
-                /* used for called function (comes from ajax call) */
                 if (isset($_POST['method_name']) && $_POST['method_name'] != '') {
-                    $response = call_user_func(array($uf_obj, $_POST['method_name']));
+                    $method = $_POST['method_name'];
+
+                    // Handle new embed‑related actions (need extra parameters)
+                    if ($method == 'check_embed_enabled') {
+                        $enabled = $uf_obj->check_embed_enabled($_POST['shop'], $_POST['token'] ?? null);
+                        return response()->json(['enabled' => $enabled]);
+                    }
+                    if ($method == 'get_theme_editor_url') {
+                        $url = $uf_obj->get_theme_editor_url($_POST['shop'], $_POST['token'] ?? null);
+                        return response()->json(['url' => $url]);
+                    }
+                    if ($method == 'remove_old_scripts') {
+                        $uf_obj->remove_all_script_tags($_POST['shop'], $_POST['token'] ?? null);
+                        $uf_obj->set_embed_enabled($_POST['shop'], 1);
+                        return response()->json(['success' => true]);
+                    }
+
+                    // Existing methods: call without arguments (they read $_POST internally)
+                    $response = call_user_func([$uf_obj, $method]);
                     return json_encode($response);
                 }
             } else {
@@ -411,7 +424,7 @@ class WebhooksController extends Controller
         }
 
         if ($is_bad_shop > 0) {
-            $response = array('result' => 'fail', 'msg' => 'Opps! Bad request call!', 'code' => '403');
+            $response = ['result' => 'fail', 'msg' => 'Opps! Bad request call!', 'code' => '403'];
             return json_encode($response);
         }
     }

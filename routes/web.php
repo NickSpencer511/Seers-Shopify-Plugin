@@ -81,8 +81,8 @@ Route::get('/', function () {
                 $shop_name = $shopinfo['name'];
                 $shop_details = array(
                     'email' => $email,
-                    'name' => $cf_obj->mres($shopinfo['name']), /* e.g example */
-                    'shop' => $shop, /* e.g example.myshopify.com */
+                    'name' => $cf_obj->mres($shopinfo['name']),
+                    'shop' => $shop,
                     'host' => $thehost,
                     'domain' => $shopinfo['domain'],
                     'token' => $token,
@@ -100,31 +100,67 @@ Route::get('/', function () {
                     'timezone' => $shopinfo['timezone'],
                     'iana_timezone' => $shopinfo['iana_timezone'],
                     'weight_unit' => $shopinfo['weight_unit'],
-                    'toggle_status' =>isset($shopinfo['toggle_status']) && $shopinfo['toggle_status'] > -1 ? $shopinfo['toggle_status']: 0
+                    'toggle_status' => isset($shopinfo['toggle_status']) && $shopinfo['toggle_status'] > -1 ? $shopinfo['toggle_status'] : 0
                 );
+
+                // Get data key and related info from Seers API
+                $data_key_response = $cf_obj->get_data_key($domain, $email);
+                $datakey = $data_key_response['key'] ?? '';
+                $access_token = $data_key_response['access_token'] ?? '';
+                $domain_id = $data_key_response['domain_id'] ?? '';
+                $user_id = $data_key_response['user_id'] ?? '';
+                $cdnbaseurl = $data_key_response['cdnbaseurl'] ?? 'https://cdn.seersco.com/';
 
                 $selected_field = '*';
                 $where = array('shop' => $shop);
                 $is_store_exist = $cf_obj->select_row(config('app.table_user_stores'), $selected_field, $where);
-                /* if store already available than */
-                $fields = $shop_details;
-                /* need to add bcoz its not exist in $shop_details array */
-                $fields['status'] = '1';
-                $fields['updated_on'] = date('Y-m-d H:i:s');
+
+                // Build fields for database (now includes Seers data and embed_enabled)
+                $fields = array_merge($shop_details, [
+                    'data_key' => $datakey,
+                    'access_token' => $access_token,
+                    'domain_id' => $domain_id,
+                    'user_id' => $user_id,
+                    'embed_enabled' => 0,          // new column, default 0
+                    'status' => '1',
+                    'updated_on' => date('Y-m-d H:i:s'),
+                ]);
+
                 if (!$is_store_exist->isEmpty() && !empty($is_store_exist[0]) && !empty($is_store_exist[0]->store_user_id)) {
                     $where = array('shop' => $shop);
                     $last_id = $cf_obj->update(config('app.table_user_stores'), $fields, $where);
-                    //$store_user_id = $is_store_exist['store_user_id'];
                     $store_user_id = $is_store_exist[0]->store_user_id;
+                    $was_existing = true;
                 } else {
-                    /* need to add bcoz its not exist in $shop_details array */
                     $fields['created_on'] = date('Y-m-d H:i:s');
                     $store_user_id = $cf_obj->insert(config('app.table_user_stores'), $fields);
+                    $was_existing = false;
                 }
-                //active this plugin
+
+                // Build script URL for metafield
+                if (!empty($user_id) && !empty($domain_id)) {
+                    $script_url = $cdnbaseurl . 'banners/' . $user_id . '/' . $domain_id . '/cb.js?param=' . $datakey . '&name=CookieXray&shop=' . $shop;
+                } else {
+                    $script_url = 'https://cdn.seersco.com/banners/default/default/cb.js?param=' . $datakey . '&name=CookieXray&shop=' . $shop;
+                }
+
+                // Save script URL as metafield (always do this)
+                $cf_obj->set_shop_metafield($shop, $token, 'cmp_script_url', $script_url, 'seers', 'string');
+
+                // Active this plugin (existing call)
                 $cf_obj->plugin_active_inactive($fields, 1);
-                $cf_obj->snippest_insert($shop, $token, $domain, $email);
-                $cf_obj->insertConsentTrackingScript($shop, $token);
+
+                // Conditionally insert script tags (only for existing stores)
+                if ($was_existing) {
+                    // Existing store: keep ScriptTags for backward compatibility
+                    $cf_obj->snippest_insert($shop, $token, $domain, $email);
+                    $cf_obj->insertConsentTrackingScript($shop, $token);
+                } else {
+                    // New store: no ScriptTags, rely on embed
+                    $cf_obj->insertConsentTrackingScript($shop, $token); // keep if needed
+                    // embed_enabled is already 0
+                }
+
                 header('Location: ' . config('app.url_user') . '?shop=' . $shop);
                 exit;
             }

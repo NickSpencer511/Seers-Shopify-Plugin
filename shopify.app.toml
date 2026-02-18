@@ -1,0 +1,8 @@
+client_id = "f9a59ca1f7f63d4c0bb6427f26b1e746"   # Your API key
+name = "GDPR Cookie Consent - CMP"
+application_url = "https://damp-autumn-6ztgkeo6w5cw.vapor-farm-d1.com"   # Replace with your actual Vapor URL
+embedded = true
+
+[[extensions]]
+type = "theme_app_extension"
+handle = "seers-cmp-embed"
