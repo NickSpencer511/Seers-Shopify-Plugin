@@ -24,21 +24,21 @@ class User_functions extends common_function {
     }
 
     public function remove_code($storeuserid = 0, $curshop = '') {
-       
+
         $store_user_id = $this->store_user_id;
-        
+
         if($storeuserid) {
             $store_user_id = $storeuserid;
         }
-        
+
         $response = array('result' => 'fail', 'msg' => 'Something went wrong');
         if (isset($store_user_id) && is_numeric($store_user_id) && $store_user_id > 0) {
             //by Shoaib actually in Post data_key is not coming then I will get the data_key from database of this current user
             $datakey = ((!empty($_POST['data_key'])) ? $_POST['data_key'] : "" );
             $token = '';
             $shop = '';
-            
-            
+
+
             if (empty($datakey)) {
                 $selected_field = 'data_key, token, shop';
                 $where = array('store_user_id' => $store_user_id);
@@ -53,16 +53,17 @@ class User_functions extends common_function {
                     $shop = $user_store['shop'];
                 }
             }
-            
-            
+
+
             //$script = '<script data-key="' . $datakey . '" data-name="CookieXray" src="https://cmp.seersco.com/script/cb.js" type="text/javascript"></script>';
             //fix by Shoaib for scripts added in old way start
-            $script = '<script(.*?)src="https://cmp.seersco.com/script/cb.js"(.*?)>(.*?)</script>';
+            $script = '<script(.*?)src="http://127.0.0.1:2000/script/cb.js"(.*?)>(.*?)</script>';
+            // $script = '<script(.*?)src="https://cmp.seersco.com/script/cb.js"(.*?)>(.*?)</script>';
             $script2 = '<script(.*?)src="https://seersco.com/script/cb.js"(.*?)>(.*?)</script>';
-            
+
             $themes = $this->prepare_api_condition(array('themes'), array('role' => 'main'), 'GET', '0', '', $curshop);
             if (!empty($themes['body']['themes'])) {
-                
+
             $theme_id = $themes['body']['themes'][0]['id'];
 
             $url_param_arr = array('asset' => array('key' => 'layout/theme.liquid'));
@@ -74,14 +75,14 @@ class User_functions extends common_function {
                 $html = preg_replace('#'. $script2 . '#is', '', $html);
             $url_param_arr = array('asset' => array('key' => 'layout/theme.liquid', 'value' => $html));
                 $theme_update = $this->prepare_api_condition(array('themes', $theme_id, 'assets'), $url_param_arr, 'PUT', '0', '', $curshop);
-                
+
             }
             // old way fix end.
-            
+
             // ----- new way remove tags start ---------
             $arrsrc = ['script/cb.js', 'https://localhost/private-apps/script/cbattributes-localhost.js?key=' . $datakey . '&name=CookieXray', 'https://seers-application-assets.s3.amazonaws.com/scripts/cbattributes.js?key=' . $datakey . '&name=CookieXray'];
             $cbattrjspath = 'https://seers-application-assets.s3.amazonaws.com/scripts/cbattributes.js';
-        
+
             if ($_SERVER['SERVER_NAME'] == 'localhost')
                 $cbattrjspath = 'https://localhost/private-apps/script/cbattributes-localhost.js';
 
@@ -96,31 +97,49 @@ class User_functions extends common_function {
                 foreach ($allscriptags['body']['script_tags'] as $thescript) {
 
                     if (stripos($thescript['src'], $arrsrc[0]) !== false) {
-                        //remove the script
-                        $scriptdel = $this->prepare_api_condition(array('script_tags', $thescript['id']), array(), 'DELETE', '0', $token, $shop);
-                    }else if (stripos($thescript['src'], $arrsrc[0]) !== false) {
-                        //remove the script
-                        $scriptdel = $this->prepare_api_condition(array('script_tags', $thescript['id']), array(), 'DELETE', '0', $token, $shop);
-                    } else if (stripos($thescript['src'], $cbattrjspath) !== false && strcasecmp($thescript['src'], $arrsrc[1]) !== 0) {
-                        //remove the script
-                        $scriptdel = $this->prepare_api_condition(array('script_tags', $thescript['id']), array(), 'DELETE', '0', $token, $shop);
+                        $scriptdel = $this->prepare_api_condition(
+                            array('script_tags', $thescript['id']), array(), 'DELETE', '0', $token, $shop
+                        );
+                    } else if (stripos($thescript['src'], 'cdn.seersco.com/banners/') !== false) {
+                        // Remove old cdn banner script tags
+                        $scriptdel = $this->prepare_api_condition(
+                            array('script_tags', $thescript['id']), array(), 'DELETE', '0', $token, $shop
+                        );
+                    } else if (stripos($thescript['src'], $cbattrjspath) !== false
+                            && strcasecmp($thescript['src'], $arrsrc[1]) !== 0) {
+                        $scriptdel = $this->prepare_api_condition(
+                            array('script_tags', $thescript['id']), array(), 'DELETE', '0', $token, $shop
+                        );
                     } else if (stripos($thescript['src'], $arrsrc[2]) !== false) {
-                        //remove the script
-                        $scriptdel = $this->prepare_api_condition(array('script_tags', $thescript['id']), array(), 'DELETE', '0', $token, $shop);
+                        $scriptdel = $this->prepare_api_condition(
+                            array('script_tags', $thescript['id']), array(), 'DELETE', '0', $token, $shop
+                        );
                     }
+
+                    // if (stripos($thescript['src'], $arrsrc[0]) !== false) {
+                    //     //remove the script
+                    //     $scriptdel = $this->prepare_api_condition(array('script_tags', $thescript['id']), array(), 'DELETE', '0', $token, $shop);
+                    // }else if (stripos($thescript['src'], $arrsrc[0]) !== false) {
+                    //     //remove the script
+                    //     $scriptdel = $this->prepare_api_condition(array('script_tags', $thescript['id']), array(), 'DELETE', '0', $token, $shop);
+                    // } else if (stripos($thescript['src'], $cbattrjspath) !== false && strcasecmp($thescript['src'], $arrsrc[1]) !== 0) {
+                    //     //remove the script
+                    //     $scriptdel = $this->prepare_api_condition(array('script_tags', $thescript['id']), array(), 'DELETE', '0', $token, $shop);
+                    // } else if (stripos($thescript['src'], $arrsrc[2]) !== false) {
+                    //     //remove the script
+                    //     $scriptdel = $this->prepare_api_condition(array('script_tags', $thescript['id']), array(), 'DELETE', '0', $token, $shop);
+                    // }
                 }
 
 
             }
             // ----- new way remove tags end ---------
-            
-            
+
+
             $response = array('result' => 'success', 'msg' => 'Code Remove successfully.');
         }
         return $response;
     }
-
-
 
     public function change_appStatus(){
 
@@ -161,7 +180,8 @@ class User_functions extends common_function {
                 'user_domain' => $domain,
                 'email' => $email,
                 'user_email' => $email,
-                'secret' => '$2y$10$9ygTfodVBVM0XVCdyzEUK.0FIuLnJT0D42sIE6dIu9r/KY3XaXXyS',
+                // 'secret' => '$2y$10$9ygTfodVBVM0XVCdyzEUK.0FIuLnJT0D42sIE6dIu9r/KY3XaXXyS',
+                'secret' => $this->apisecrekkey,
                 'platform' => 'shopify',
                 'status'=>$data_status,
             );
@@ -175,7 +195,7 @@ class User_functions extends common_function {
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
+                CURLOPT_TIMEOUT => 30,
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_SSL_VERIFYPEER => false,
                 CURLOPT_SSL_VERIFYHOST => false,
@@ -190,7 +210,7 @@ class User_functions extends common_function {
             curl_close($curl);
 
             $result =  json_decode($response, TRUE);
-           
+
             //var_dump($result);
             //exit;
             //by Shoaib in reponse there is no element of banner_enable
@@ -198,27 +218,30 @@ class User_functions extends common_function {
 
           //$banner_status = $result['banner_enable'];
           $banner_status = ((!empty($result['banner_enable'])) ? $result['banner_enable'] : ((isset($result['status'])) ? $result['status'] : $already_toggle_status ) );
-          
+
           if(!empty($result['key'])){
-                $user_key = $result['key']; 
+                $user_key = $result['key'];
            }else{
                 $user_key = "";
            }
 
            if(!empty($result['cdnbaseurl']))
             $scriptbaseurl = $result['cdnbaseurl'];
-          
+
             //$banner_status = '1';
            $jsonresponse = array('result' => 'fail', 'msg' => 'Something went wrong');
-                
+
             if($banner_status=='1'){
                 $jsonresponse = array('result' => 'success', 'key'=>$user_key, 'msg' => "<p><span class ='banner-tick'></span>Banner is enabled on your store. <br> <span style='margin-left:18px;'></span>Please refresh your store home page to see the effect.</p>");
-                $this->snippest_insert($shop, $token, $domain, $email);
+                // $this->snippest_insert($shop, $token, $domain, $email);
+                $this->activate_app_embed($shop, $token, $domain, $email);
                 $this->insertConsentTrackingScript($shop, $token);
+                $this->remove_code();
 
-                
+
           }else{
               $jsonresponse = array('result' => 'success', 'key'=>$user_key, 'msg' => 'Banner is disabled on your store');
+                $this->deactivate_app_embed($shop, $token);
                 $this->remove_code();
             }
             /** Update Banner Status */
@@ -258,28 +281,29 @@ class User_functions extends common_function {
         $shop = isset($_POST['shop']) ? $_POST['shop'] : $_GET['shop'];
         $email = isset($_POST['email']) ? $_POST['email'] : null;
         $token = isset($_POST['token']) ? $_POST['token'] : null;
-    
+
         if (!$domain || !$email || !$shop) {
             return [
                 'status' => 'error',
                 'message' => 'Domain, email, and shop fields are required.'
             ];
         }
-    
+
         $data = array(
             'domain' => $domain,
             'email' => $email,
-            'secret' => '$2y$10$9ygTfodVBVM0XVCdyzEUK.0FIuLnJT0D42sIE6dIu9r/KY3XaXXyS',
+            // 'secret' => '$2y$10$9ygTfodVBVM0XVCdyzEUK.0FIuLnJT0D42sIE6dIu9r/KY3XaXXyS',
+            'secret' => $this->apisecrekkey,
             'lang' => 'en_US',
             'platform' => 'shopify',
             'token' => $token
         );
-    
+
         $referer_url = "https://" . $domain;
-    
+
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->apibaseurl . "get-shopify-banner-settings", 
+            CURLOPT_URL => $this->apibaseurl . "get-shopify-banner-settings",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -288,7 +312,7 @@ class User_functions extends common_function {
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => json_encode($data),
-            CURLOPT_SSL_VERIFYPEER => false, 
+            CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/json',
@@ -296,20 +320,20 @@ class User_functions extends common_function {
                 'Referer: ' . $referer_url
             ),
         ));
-    
+
         $response = curl_exec($curl);
         $err = curl_error($curl);
         curl_close($curl);
-    
+
         if ($err) {
             return [
                 'status' => 'error',
                 'message' => 'cURL Error: ' . $err
             ];
         }
-    
+
         $api_response = json_decode($response, true);
-    
+
         if (json_last_error() === JSON_ERROR_NONE) {
             return [
                 'status' => 'success',
@@ -328,22 +352,22 @@ class User_functions extends common_function {
     public function update_user_data() {
         $domain = isset($_POST['domain']) ? $_POST['domain'] : null;
         $cf_obj = new common_function($domain);
-    
+
         $shop = isset($_POST['shop']) ? $_POST['shop'] : $_GET['shop'];
         $email = isset($_POST['email']) ? $_POST['email'] : null;
         $data = isset($_POST['data']) ? $_POST['data'] : null;
         $token = isset($_POST['token']) ? $_POST['token'] : null;
         $domain_id = $_POST['domain_id'] ?? '';
         $user_id = $_POST['user_id'] ?? '';
-    
+
         $payload = [
             'data' => $data,
             'token' => $token
         ];
-    
-    
+
+
         $referer_url = "https://" . $domain;
-    
+
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->apibaseurl . "update-shopify-banner-settings",
@@ -354,7 +378,7 @@ class User_functions extends common_function {
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => json_encode($payload), 
+            CURLOPT_POSTFIELDS => json_encode($payload),
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_HTTPHEADER => array(
@@ -363,23 +387,23 @@ class User_functions extends common_function {
                 'Referer: ' . $referer_url
             ),
         ));
-    
+
         $response = curl_exec($curl);
         $err = curl_error($curl);
         curl_close($curl);
-    
+
         if ($err) {
             return [
                 'status' => 'error',
                 'message' => 'cURL Error: ' . $err
             ];
         }
-    
-    
+
+
         $api_response = json_decode($response, true);
-    
+
         if (json_last_error() === JSON_ERROR_NONE) {
-            $allscript = $cf_obj->snippest_insert_v2($shop, $token, $domain, $email);
+            $allscript = $cf_obj->activate_app_embed($shop, $token, $domain, $email);
             return [
                 'status' => 'success',
                 'message' => 'Changes Saved Successfully',
@@ -396,12 +420,267 @@ class User_functions extends common_function {
             ];
         }
     }
-    
-    
-    
+
+   public function update_store_data() {
+    $shop         = isset($_POST['shop']) ? $_POST['shop'] : '';
+    $new_domain   = isset($_POST['new_domain']) ? trim($_POST['new_domain']) : '';
+    $new_data_key = isset($_POST['new_data_key']) ? trim($_POST['new_data_key']) : '';
+    $new_email    = isset($_POST['new_email']) ? trim($_POST['new_email']) : '';
+
+    if (!$shop || !$new_domain || !$new_data_key || !$new_email) {
+        return [
+            'status'  => 'error',
+            'message' => 'Shop, domain, email, and data key are required.'
+        ];
+    }
+
+    $cf_obj = new common_function($shop);
+
+    // Single DB fetch
+    $where       = ['shop' => $shop, 'store_user_id' => $this->store_user_id];
+    $existing_rs = $cf_obj->select_row(config('app.table_user_stores'), '*', $where);
+    $existing    = (count($existing_rs) > 0 && !empty($existing_rs[0]->shop))
+                    ? (array) $existing_rs[0]
+                    : ((!$existing_rs->isEmpty()) ? (array) $existing_rs[0] : []);
+
+    if (empty($existing)) {
+        return ['status' => 'error', 'message' => 'Store record not found.'];
+    }
+
+    $token = $existing['token'] ?? '';
+
+    // Step 1 — Validate new_data_key against cmp-vapor API
+    $payload = [
+        'key'         => $new_data_key,
+        'domain_name' => $new_domain,
+    ];
+
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL            => config('app.cmp_vapor_api_url') . 'cookieXray-get-domain-by-key',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING       => '',
+        CURLOPT_MAXREDIRS      => 10,
+        CURLOPT_TIMEOUT        => 30,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST  => 'POST',
+        CURLOPT_POSTFIELDS     => json_encode($payload),
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_HTTPHEADER     => [
+            'Content-Type: application/json',
+            'Accept: application/json',
+        ],
+    ]);
+
+    $response = curl_exec($curl);
+    $err      = curl_error($curl);
+    curl_close($curl);
+
+    if ($err) {
+        return ['status' => 'error', 'message' => 'Could not validate Domain Group ID. Please try again.'];
+    }
+
+    $result = json_decode($response, true);
+
+    if (empty($result['success']) || $result['success'] !== true) {
+        return ['status' => 'error', 'message' => 'Invalid Domain Group ID. Please check and try again.'];
+    }
+
+    // Step 2 — Extract values from cmp-vapor response
+    $new_user_id   = $result['user_id']   ?? '';
+    $new_domain_id = $result['domain_id'] ?? '';
+    $scriptbaseurl = 'https://cdn.seersco.com/';
+
+    // Step 3 — Build cb_js_url
+    if (!empty($new_user_id) && !empty($new_domain_id)) {
+        $new_cb_js_url = $scriptbaseurl . 'banners/' . $new_user_id . '/' . $new_domain_id
+            . '/cb.js?param=' . $new_data_key . '&name=CookieXray';
+    } else {
+        $new_cb_js_url = $scriptbaseurl . 'banners/default/default/cb.js?param='
+            . $new_data_key . '&name=CookieXray';
+    }
+
+    // Step 4 — Update user_stores
+    $update_data = [
+        'domain'     => $new_domain,
+        'email'      => $new_email,
+        'data_key'   => $new_data_key,
+        'domain_id'  => $new_domain_id,
+        'user_id'    => $new_user_id,
+        'cb_js_url'  => $new_cb_js_url,
+        'updated_on' => date('Y-m-d H:i:s'),
+    ];
+
+    $cf_obj->update(config('app.table_user_stores'), $update_data, $where);
+
+    // Step 5 — Check existing Script Tags to detect client type
+    $allscriptags  = $cf_obj->prepare_api_condition(
+        ['script_tags'], [], 'GET', '0', $token, $shop
+    );
+
+    $tags_body     = json_decode(json_encode($allscriptags['body']), true);
+    $has_seers_tag = false;
+
+    if (!empty($tags_body['script_tags'])) {
+        foreach ($tags_body['script_tags'] as $thescript) {
+            if (stripos($thescript['src'], 'cdn.seersco.com/banners/') !== false
+                && stripos($thescript['src'], '/cb.js') !== false) {
+
+                // Delete old Script Tag
+                $cf_obj->prepare_api_condition(
+                    ['script_tags', $thescript['id']],
+                    [], 'DELETE', '0', $token, $shop
+                );
+                $has_seers_tag = true;
+
+                Log::info('update_store_data - deleted old script tag: ' . $thescript['src']);
+            }
+        }
+    }
+
+    // Step 6 — Handle based on client type
+    if ($has_seers_tag) {
+
+        // EXISTING SCRIPT TAG CLIENT
+        // Recreate Script Tag with new URL
+        Log::info('update_store_data - Script Tag client detected, creating new tag');
+
+        $cf_obj->prepare_api_condition(
+            ['script_tags'],
+            [
+                'script_tag' => [
+                    'event'         => 'onload',
+                    'src'           => $new_cb_js_url,
+                    'display_scope' => 'online_store',
+                ]
+            ],
+            'POST', '0', $token, $shop
+        );
+
+        Log::info('update_store_data - new script tag created: ' . $new_cb_js_url);
+
+        // Also update metafields for future migration readiness
+        $cf_obj->update_shop_metafields(
+            $shop, $token, $new_data_key, $new_domain_id, $new_user_id, $new_cb_js_url
+        );
+
+        Log::info('update_store_data - Script Tag client completed successfully');
+
+        return [
+            'status'    => 'success',
+            'message'   => 'Store data and script updated successfully.',
+            'cb_js_url' => $new_cb_js_url,
+        ];
+
+    } else {
+
+        // NEW THEME APP EXTENSION CLIENT
+        // Update metafields only — no Script Tag needed
+        Log::info('update_store_data - Theme App Extension client detected, updating metafields');
+
+        $extension_update = $cf_obj->update_shop_metafields(
+            $shop,
+            $token,
+            $new_data_key,
+            $new_domain_id,
+            $new_user_id,
+            $new_cb_js_url
+        );
+
+        if ($extension_update['status'] !== 'success') {
+            Log::error('update_store_data - Metafields update failed', $extension_update);
+            return [
+                'status'    => 'warning',
+                'message'   => 'Store data updated but script update failed: ' . $extension_update['message'],
+                'cb_js_url' => $new_cb_js_url,
+            ];
+        }
+
+        Log::info('update_store_data - Theme App Extension client completed successfully');
+
+        return [
+            'status'    => 'success',
+            'message'   => 'Store data and script updated successfully.',
+            'cb_js_url' => $new_cb_js_url,
+        ];
+    }
+}
+
+    public function lookup_domain_by_key() {
+        $new_data_key = isset($_POST['new_data_key']) ? trim($_POST['new_data_key']) : '';
+        $shop         = isset($_POST['shop']) ? trim($_POST['shop']) : '';
+
+        if (!$new_data_key || !$shop) {
+            return [
+                'status'  => 'error',
+                'message' => 'Domain Group ID and shop are required.'
+            ];
+        }
+
+        // Call cmp-vapor API to lookup domain by key
+        $payload = [
+            'key'         => $new_data_key,
+            'domain_name' => $shop, // shop = domain name e.g. seers-staging-plugin-h.myshopify.com
+        ];
+
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL            => config('app.cmp_vapor_api_url') . 'cookieXray-get-domain-by-key',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING       => '',
+            CURLOPT_MAXREDIRS      => 10,
+            CURLOPT_TIMEOUT        => 30,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST  => 'POST',
+            CURLOPT_POSTFIELDS     => json_encode($payload),
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_HTTPHEADER     => [
+                'Content-Type: application/json',
+                'Accept: application/json',
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+        $err      = curl_error($curl);
+        curl_close($curl);
+
+        if ($err) {
+            return [
+                'status'  => 'error',
+                'message' => 'cURL Error: ' . $err
+            ];
+        }
+
+        $result = json_decode($response, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE || empty($result)) {
+            return [
+                'status'  => 'error',
+                'message' => 'Invalid response from CMP API.'
+            ];
+        }
+
+        if (!empty($result['success']) && $result['success'] === true) {
+            return [
+                'status'      => 'success',
+                'domain_name' => $result['domain']['name']  ?? '',
+                'user_email'  => $result['user_email']       ?? '',
+                'user_id'     => $result['user_id']          ?? '',
+                'domain_id'   => $result['domain_id']        ?? '',
+            ];
+        }
+
+        return [
+            'status'  => 'error',
+            'message' => $result['message'] ?? 'Domain Group ID not found.'
+        ];
+    }
+
     public function updateToogelStatus($cf_obj, $shop, $banner_status,$user_domain,$user_email,$user_key){
-
-
         $shop_details = array(
             'status'=>'1',
             'updated_on'=>date('Y-m-d H:i:s'),
@@ -451,7 +730,11 @@ class User_functions extends common_function {
             }
         }
         if (!empty($response['access_token']) && !empty($response['domain_id'])) {
-            $url = 'https://app.seersco.com/token/?access_token=' . urlencode($response['access_token']) . '&domain_id=' . urlencode($response['domain_id']);
+            // $url = 'https://app.seersco.com/token/?access_token=' . urlencode($response['access_token']) . '&domain_id=' . urlencode($response['domain_id']);
+            // $url = 'http://localhost:8080/token/?access_token=' . urlencode($response['access_token']) . '&domain_id=' . urlencode($response['domain_id']);
+            $url = config('SEERS_CMP_DASHBOARD_URL', 'https://app.seersco.com')
+                . '/token/?access_token=' . urlencode($response['access_token'])
+                . '&domain_id=' . urlencode($response['domain_id']);
             if (!empty($tab_name)) {
                 $url .= '&tab_name=' . urlencode($tab_name);
             }

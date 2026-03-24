@@ -1,0 +1,16 @@
+name = "GDPR Cookie Consent - Local"
+client_id = "41138d856f4038a53ac92b573d7adadd"
+application_url = "https://mesomorphic-leonarda-paretically.ngrok-free.dev"
+embedded = true
+
+[access_scopes]
+scopes = "read_themes,write_themes,read_script_tags,write_script_tags"
+
+[auth]
+redirect_urls = [
+  "https://mesomorphic-leonarda-paretically.ngrok-free.dev",
+  "https://mesomorphic-leonarda-paretically.ngrok-free.dev/auth/callback"
+]
+
+[webhooks]
+api_version = "2024-10"

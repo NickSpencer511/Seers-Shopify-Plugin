@@ -1,5 +1,6 @@
 <?php
-
+// Allow Shopify to embed this app in iframe
+header("Content-Security-Policy: frame-ancestors https://admin.shopify.com https://*.myshopify.com");
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 

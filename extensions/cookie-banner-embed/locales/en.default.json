@@ -1,0 +1,22 @@
+{
+  "cookie_banner": {
+    "name": "Cookie Banner",
+    "settings": {
+      "enable_banner": {
+        "label": "Enable Cookie Banner"
+      },
+      "data_key": {
+        "label": "Data Key"
+      },
+      "domain_id": {
+        "label": "Domain ID"
+      },
+      "user_id": {
+        "label": "User ID"
+      },
+      "cb_js_url": {
+        "label": "Banner Script URL"
+      }
+    }
+  }
+}

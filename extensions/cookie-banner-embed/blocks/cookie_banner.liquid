@@ -1,0 +1,65 @@
+{% comment %} Seers CMP Cookie Banner App Embed {% endcomment %}
+{% comment %} Note: Script intentionally synchronous for consent management {% endcomment %}
+
+{% if block.settings.enable_banner %}
+
+{% comment %} Read from shop metafields (updated by app) with fallback to block settings {% endcomment %}
+{% assign data_key  = shop.metafields.seers_cmp.data_key | default: block.settings.data_key %}
+{% assign cb_js_url = shop.metafields.seers_cmp.cb_js_url | default: block.settings.cb_js_url %}
+{% assign domain_id = shop.metafields.seers_cmp.domain_id | default: block.settings.domain_id %}
+{% assign user_id   = shop.metafields.seers_cmp.user_id   | default: block.settings.user_id %}
+
+<script>
+  window.seersConfig = {
+    dataKey:  "{{ data_key }}",
+    domainId: "{{ domain_id }}",
+    userId:   "{{ user_id }}",
+    shop:     "{{ shop.permanent_domain }}"
+  };
+</script>
+
+<script
+  id="seers-cmp-script"
+  src="{{ cb_js_url }}"
+  data-key="{{ data_key }}"
+  data-name="CookieXray"
+  data-shopify-cmp=""
+  type="text/javascript"
+></script>
+
+{% endif %}
+
+{% schema %}
+{
+  "name": "Cookie Banner",
+  "target": "head",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_banner",
+      "label": "Enable Cookie Banner",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "data_key",
+      "label": "Data Key"
+    },
+    {
+      "type": "text",
+      "id": "domain_id",
+      "label": "Domain ID"
+    },
+    {
+      "type": "text",
+      "id": "user_id",
+      "label": "User ID"
+    },
+    {
+      "type": "text",
+      "id": "cb_js_url",
+      "label": "Banner Script URL"
+    }
+  ]
+}
+{% endschema %}

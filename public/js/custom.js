@@ -8,7 +8,7 @@ var SVG_LOADER = '<svg viewBox="0 0 20 20" class="Polaris-Spinner Polaris-Spinne
  ****************************/
 
 /*
- * 
+ *
  * @param string $message
  * @returns {undefined} show flash message
  */
@@ -106,7 +106,7 @@ function removeCode(thisObj, data_key) {
             }
         });
     }
-    
+
     if(mode == 'live'){
         ShopifyApp.Modal.confirm({
             title: 'Uninstall',
@@ -144,7 +144,7 @@ function toggleCheckedVal(switchval,userdomain,useremail,datakey){
             },
             success: function (response) {
                 if (response['result'] == 'success') {
-                     $(".enable-banner").html(response['msg']); 
+                     $(".enable-banner").html(response['msg']);
                      $('#user_key').val(response['key']);
 
                      if (response["errormsg"] !== undefined){
@@ -160,42 +160,33 @@ function toggleCheckedVal(switchval,userdomain,useremail,datakey){
 }
 window.userData = {};
 
-function getUserData(switchval, userdomain, useremail, datakey, token) {
+    function getUserData(switchval, userdomain, useremail, datakey, token) {
     $(".loadingoverlay").css("display", "flex");
 
     const payload = {
         method_name: 'get_user_data',
-        domain: userdomain, 
+        domain: userdomain,
         email: useremail,
         platform: 'shopify',
         lang: 'en_US',
         data_key: datakey,
-        shop: 'seers-cookie-consent.myshopify.com',
+        shop: shop,      // ← use the global 'shop' variable, not hardcoded
         token: token
     };
-
-    // console.log("Payload Sent to API:", payload);
 
     $.ajax({
         url: siteapiactionurl,
         type: "post",
-        dataType: "json", 
+        dataType: "json",
         data: payload,
         success: function(response) {
             if (response.status === 'success') {
-                // console.log("API Data: ", response.data);
-
                 window.userData = response.data;
-
                 $(document).trigger('userDataReady', [window.userData]);
-            } else {
-                // console.log("Error: ", response.message);
             }
         },
         error: function(xhr, status, error) {
             console.log("AJAX Error: ", xhr.responseText);
-            console.log("Status: ", status);
-            console.log("Error: ", error);
         },
         complete: function() {
             $(".loadingoverlay").css("display", "none");
@@ -203,41 +194,31 @@ function getUserData(switchval, userdomain, useremail, datakey, token) {
     });
 }
 
-
 function updateUserData(switchval, userdomain, useremail, datakey, data, token) {
     $(".loadingoverlay").css("display", "flex");
 
     const payload = {
         method_name: 'update_user_data',
-        domain: userdomain, 
+        domain: userdomain,
         email: useremail,
         platform: 'shopify',
         lang: 'en_US',
         data_key: datakey,
-        shop: 'seers-cookie-consent.myshopify.com',
+        shop: shop,      // ← use the global 'shop' variable, not hardcoded
         data: data,
         token: token
     };
 
-    // console.log("Payload Sent to API:", payload);
-
     $.ajax({
         url: siteapiactionurl,
         type: "post",
-        dataType: "json", 
+        dataType: "json",
         data: payload,
-        beforeSend: function() {
-            // console.log("AJAX request started...");
-        },
         complete: function() {
             $(".loadingoverlay").hide();
         },
         success: function(response) {
-            // console.log("AJAX success:", response);
-
             if (response.status === 'success') {
-                // window.userData = response.data; 
-                // $(document).trigger('userDataReady', [window.userData]);
                 flashNotice(response.message || "Data updated successfully!");
             } else {
                 flashNotice(response.message || "An error occurred while updating data", "error");
@@ -247,20 +228,110 @@ function updateUserData(switchval, userdomain, useremail, datakey, data, token) 
             console.log("AJAX Error:", error);
             flashNotice("An error occurred while updating data", "error");
         },
-       
     });
-
 }
+
+// function getUserData(switchval, userdomain, useremail, datakey, token) {
+//     $(".loadingoverlay").css("display", "flex");
+
+//     const payload = {
+//         method_name: 'get_user_data',
+//         domain: userdomain,
+//         email: useremail,
+//         platform: 'shopify',
+//         lang: 'en_US',
+//         data_key: datakey,
+//         shop: 'seers-cookie-consent.myshopify.com',
+//         token: token
+//     };
+
+//     // console.log("Payload Sent to API:", payload);
+
+//     $.ajax({
+//         url: siteapiactionurl,
+//         type: "post",
+//         dataType: "json",
+//         data: payload,
+//         success: function(response) {
+//             if (response.status === 'success') {
+//                 // console.log("API Data: ", response.data);
+
+//                 window.userData = response.data;
+
+//                 $(document).trigger('userDataReady', [window.userData]);
+//             } else {
+//                 // console.log("Error: ", response.message);
+//             }
+//         },
+//         error: function(xhr, status, error) {
+//             console.log("AJAX Error: ", xhr.responseText);
+//             console.log("Status: ", status);
+//             console.log("Error: ", error);
+//         },
+//         complete: function() {
+//             $(".loadingoverlay").css("display", "none");
+//         }
+//     });
+// }
+
+
+// function updateUserData(switchval, userdomain, useremail, datakey, data, token) {
+//     $(".loadingoverlay").css("display", "flex");
+
+//     const payload = {
+//         method_name: 'update_user_data',
+//         domain: userdomain,
+//         email: useremail,
+//         platform: 'shopify',
+//         lang: 'en_US',
+//         data_key: datakey,
+//         shop: 'seers-cookie-consent.myshopify.com',
+//         data: data,
+//         token: token
+//     };
+
+//     // console.log("Payload Sent to API:", payload);
+
+//     $.ajax({
+//         url: siteapiactionurl,
+//         type: "post",
+//         dataType: "json",
+//         data: payload,
+//         beforeSend: function() {
+//             // console.log("AJAX request started...");
+//         },
+//         complete: function() {
+//             $(".loadingoverlay").hide();
+//         },
+//         success: function(response) {
+//             // console.log("AJAX success:", response);
+
+//             if (response.status === 'success') {
+//                 // window.userData = response.data;
+//                 // $(document).trigger('userDataReady', [window.userData]);
+//                 flashNotice(response.message || "Data updated successfully!");
+//             } else {
+//                 flashNotice(response.message || "An error occurred while updating data", "error");
+//             }
+//         },
+//         error: function(xhr, status, error) {
+//             console.log("AJAX Error:", error);
+//             flashNotice("An error occurred while updating data", "error");
+//         },
+
+//     });
+
+// }
 
 
 //  $(document).off("click", ".customizeSeersBtn").on("click", ".customizeSeersBtn", function (e) {
 //     e.preventDefault();
-    
+
 //     var domain = $("#user_doamin").val();
 //     var email = $("#user_email").val();
 //     var $btn = $(this);
 //     var shop = window.shop || '';
-    
+
 //     loading_show($btn);
 
 //     $.ajax({
@@ -288,10 +359,12 @@ function updateUserData(switchval, userdomain, useremail, datakey, data, token) 
 //         }
 //     });
 // });
+
 $(document).off("click", ".customizeSeersBtn").on("click", ".customizeSeersBtn", function (e) {
     e.preventDefault();
 
     var domain = $("#user_doamin").val();
+    // var user_doamin = '<?php echo !empty($current_user['user_domain']) ? $current_user['user_domain'] : $current_user['domain']; ?>';
     var email = $("#user_email").val();
     var $btn = $(this);
     var shop = window.shop || '';
@@ -300,7 +373,7 @@ $(document).off("click", ".customizeSeersBtn").on("click", ".customizeSeersBtn",
 
     $btn.data('original-html', $btn.html());
 
-    var loadingText = $btn.data('loading-text') || ''; 
+    var loadingText = $btn.data('loading-text') || '';
     loading_show($btn, loadingText);
 
     $.ajax({
@@ -326,7 +399,7 @@ $(document).off("click", ".customizeSeersBtn").on("click", ".customizeSeersBtn",
             flashNotice("Something went wrong", "error");
         },
         complete: function () {
-            loading_hide($btn); 
+            loading_hide($btn);
         }
     });
 });
