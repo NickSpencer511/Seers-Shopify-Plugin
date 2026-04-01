@@ -587,50 +587,68 @@ class common_function {
             $cbattrjspath = 'https://localhost/private-apps/script/cbattributes-localhost.js';
             
         if(!empty($response['user_id']) && !empty($response['domain_id'])) {
-            //$arrsrc = [ $scriptbaseurl . 'banners/' . $response['user_id'] . '/' . $response['domain_id'] . '/cb.js', $cbattrjspath . '?key=' . $datakey . '&name=CookieXray'];
-            $arrsrc = [ $scriptbaseurl . 'banners/' . $response['user_id'] . '/' . $response['domain_id'] . '/cb.js' . '?param=' . $datakey . '&name=CookieXray'];
+            $arrsrc = [ 
+                $scriptbaseurl . 'banners/' . $response['user_id'] . '/' . $response['domain_id'] . '/cb.js' 
+                . '?param=' . urlencode($datakey) 
+                . '&name=CookieXray'
+                . '&shop=' . urlencode($shop)
+            ];
         } else {
-            //$arrsrc = [ 'https://seerscophp8.backend/script/cb.js', $cbattrjspath . '?key=' . $datakey . '&name=CookieXray'];
-            $arrsrc = [ 'https://seerscophp8.backend/script/cb.js' . '?param=' . $datakey . '&name=CookieXray'];
+            $arrsrc = [ 
+                'https://cdn.seersco.com/banners/default/default/cb.js' 
+                . '?param=' . urlencode($datakey) 
+                . '&name=CookieXray'
+                . '&shop=' . urlencode($shop)
+            ];
         }
             
-
-        $arrscriptexist = [false, false];
-        
-        
-        //get all avialable tags
+        $this->inject_into_theme($shop, $token, $arrsrc[0]);
         $allscriptags = $this->prepare_api_condition(array('script_tags'), array(), 'GET', '0', $token, $shop);
-        
-        //print_r($allscriptags);
-        
-        if(!empty($allscriptags['body']) && !empty($allscriptags['body']['script_tags'])) {
-            
-            foreach ($allscriptags['body']['script_tags'] as $thescript) {
-                
-                if (strcasecmp($thescript['src'], $arrsrc[0]) === 0) {
-                    $arrscriptexist[0] = true;
-                } else if (strcasecmp($thescript['src'], $arrsrc[1]) === 0) {
-                    $arrscriptexist[1] = true;
-                } else if (stripos($thescript['src'], $cbattrjspath) !== false && strcasecmp($thescript['src'], $arrsrc[1]) !== 0) {
-                    $arrscriptexist[1] = false;
-                    //remove the script
-                    $scriptdel = $this->prepare_api_condition(array('script_tags', $thescript['id']), array(), 'DELETE', '0', $token, $shop);
-                }
-            }
-            
-            
+if (!empty($allscriptags['body']['script_tags'])) {
+    foreach ($allscriptags['body']['script_tags'] as $thescript) {
+        if (stripos($thescript['src'], 'seersco.com') !== false) {
+            $this->prepare_api_condition(
+                array('script_tags', $thescript['id']), array(), 'DELETE', '0', $token, $shop
+            );
         }
+    }
+}
+        // $arrscriptexist = [false, false];
         
-        foreach ($arrsrc as $sitind => $sitesrc) {
+        
+        // //get all avialable tags
+        // $allscriptags = $this->prepare_api_condition(array('script_tags'), array(), 'GET', '0', $token, $shop);
+        
+        // //print_r($allscriptags);
+        
+        // if(!empty($allscriptags['body']) && !empty($allscriptags['body']['script_tags'])) {
             
-            if (!$arrscriptexist[$sitind]) {
+        //     foreach ($allscriptags['body']['script_tags'] as $thescript) {
                 
-                //add this src in scripts
-                $scriptinsert = $this->prepare_api_condition(array('script_tags'), array('script_tag' => array( "event"=>"onload", "src"=>$sitesrc, "display_scope" => "online_store","attributes" => array("data-shopify-cmp" => ""))), 'POST', '0', $token, $shop);
-                
-            }
+        //         if (strcasecmp($thescript['src'], $arrsrc[0]) === 0) {
+        //             $arrscriptexist[0] = true;
+        //         } else if (strcasecmp($thescript['src'], $arrsrc[1]) === 0) {
+        //             $arrscriptexist[1] = true;
+        //         } else if (stripos($thescript['src'], $cbattrjspath) !== false && strcasecmp($thescript['src'], $arrsrc[1]) !== 0) {
+        //             $arrscriptexist[1] = false;
+        //             //remove the script
+        //             $scriptdel = $this->prepare_api_condition(array('script_tags', $thescript['id']), array(), 'DELETE', '0', $token, $shop);
+        //         }
+        //     }
             
-        }
+            
+        // }
+        
+        // foreach ($arrsrc as $sitind => $sitesrc) {
+            
+        //     if (!$arrscriptexist[$sitind]) {
+                
+        //         //add this src in scripts
+        //         $scriptinsert = $this->prepare_api_condition(array('script_tags'), array('script_tag' => array( "event"=>"onload", "src"=>$sitesrc, "display_scope" => "online_store","attributes" => array("data-shopify-cmp" => ""))), 'POST', '0', $token, $shop);
+                
+        //     }
+            
+        // }
 
 
         // $responseUser = $this->get_user_data($domain, $email);
@@ -643,70 +661,61 @@ class common_function {
 
     public function snippest_insert_v2($shop, $token, $domain, $email) {
 
-        $selected_field = 'data_key';
-        $where = ['shop' => $shop, 'status' => '1'];
-        $store_row_rs = $this->select_row(config('app.table_user_stores'), $selected_field, $where);
 
-        $store_row = (count($store_row_rs) > 0 && !empty($store_row_rs[0]->email)) 
-            ? (array) $store_row_rs[0] 
-            : ((!$store_row_rs->isEmpty()) ? (array) $store_row_rs[0] : []);
+        $store_row = \DB::table(config('app.table_user_stores'))
+        ->select('data_key', 'domain_id', 'user_id')
+        ->where('shop', $shop)
+        ->where('status', '1')
+        ->first();
 
-        $datakey = $store_row['data_key'] ?? '';
+        if (!$store_row) {
+            return ['error' => 'Store not found'];
+        }
 
-        $response = $this->get_data_key($domain, $email);
-        $datakey   = $response['key'] ?? $datakey;
-        $domain_id = $response['domain_id'] ?? '';
-        $user_id   = $response['user_id'] ?? '';
+        $store_row = (array) $store_row;
+
+        $datakey   = $store_row['data_key'] ?? '';
+        $domain_id = $store_row['domain_id'] ?? '';
+        $user_id   = $store_row['user_id'] ?? '';
         $scriptbaseurl = $response['cdnbaseurl'] ?? "https://cdn.seersco.com/";
 
-        $fields = [
-            'data_key' => $datakey,
-            'domain_id' => $domain_id,
-            'user_id' => $user_id
-        ];
-        $this->update(config('app.table_user_stores'), $fields, ['shop' => $shop]);
+    $fields = [
+        'data_key'  => $datakey,
+        'domain_id' => $domain_id,
+        'user_id'   => $user_id
+    ];
+    $this->update(config('app.table_user_stores'), $fields, ['shop' => $shop]);
 
-        if(!empty($user_id) && !empty($domain_id)) {
-            $cb_js_url = $scriptbaseurl . 'banners/' . $user_id . '/' . $domain_id . '/cb.js?param=' . $datakey . '&name=CookieXray&shop=' . $shop;
-        } else {
-            $cb_js_url = 'https://cdn.seersco.com/banners/default/default/cb.js?param=' . $datakey . '&name=CookieXray&shop=' . $shop;
-        }
+    if (!empty($user_id) && !empty($domain_id)) {
+        $cb_js_url = $scriptbaseurl . 'banners/' . $user_id . '/' . $domain_id . '/cb.js'
+            . '?param=' . $datakey
+            . '&name=CookieXray'
+            . '&shop=' . $shop;
+    } else {
+        $cb_js_url = 'https://cdn.seersco.com/banners/default/default/cb.js'
+            . '?param=' . $datakey
+            . '&name=CookieXray'
+            . '&shop=' . $shop;
+    }
 
-        $allscriptags = $this->prepare_api_condition(['script_tags'], [], 'GET', '0', $token, $shop);
-
-        $script_exists = false;
-
-        if(!empty($allscriptags['body']['script_tags'])) {
-            foreach ($allscriptags['body']['script_tags'] as $thescript) {
-
-                if(strpos($thescript['src'], 'cdn.seersco.com/banners/') !== false && strpos($thescript['src'], '/cb.js') !== false) {
-                    preg_match('#banners/([0-9]+)/([0-9]+)/cb\.js\?param=([^&]+)#', $thescript['src'], $m);
-
-                    if(!empty($m) && ($m[1] != $user_id || $m[2] != $domain_id || urldecode($m[3]) != $datakey)) {
-                        $this->prepare_api_condition(['script_tags', $thescript['id']], [], 'DELETE', '0', $token, $shop);
-                        continue;
-                    }
-
-                    if(!empty($m) && $m[1] == $user_id && $m[2] == $domain_id && urldecode($m[3]) == $datakey) {
-                        $script_exists = true;
-                    }
-                }
+    $allscriptags = $this->prepare_api_condition(['script_tags'], [], 'GET', '0', $token, $shop);
+    if (!empty($allscriptags['body']['script_tags'])) {
+        foreach ($allscriptags['body']['script_tags'] as $thescript) {
+            if (stripos($thescript['src'], 'seersco.com') !== false) {
+                $this->prepare_api_condition(
+                    ['script_tags', $thescript['id']], [], 'DELETE', '0', $token, $shop
+                );
             }
         }
-
-        if(!$script_exists) {
-            $this->prepare_api_condition(['script_tags'], [
-                'script_tag' => [
-                    'event' => 'onload',
-                    'src' => $cb_js_url,
-                    'display_scope' => 'online_store',
-                    'attributes' => ['data-shopify-cmp' => '']
-                ]
-            ], 'POST', '0', $token, $shop);
-        }
-
-        return $allscriptags;
     }
+
+    $this->inject_into_theme($shop, $token, $cb_js_url);
+
+    return [
+    'store_row' => $store_row,
+    'allscriptags' => $allscriptags,
+];
+}
 
 
     public function insertConsentTrackingScript($shop, $token)
@@ -788,6 +797,84 @@ class common_function {
         $replace = array("\\\\","\\0","\\n", "\\r", "\'", '\"', "\\Z");
 
         return str_replace($search, $replace, $value);
+    }
+
+    public function inject_into_theme($shop, $token, $cb_js_url)
+    {
+        $themes = $this->prepare_api_condition(
+            ['themes'],
+            ['role' => 'main'],
+            'GET',
+            '0',
+            $token,
+            $shop
+        );
+
+        if (empty($themes['body']['themes'])) return false;
+
+        $theme_id = $themes['body']['themes'][0]['id'];
+
+        $theme_response = $this->prepare_api_condition(
+            ['themes', $theme_id, 'assets'],
+            ['asset[key]' => 'layout/theme.liquid'],
+            'GET',
+            '0',
+            $token,
+            $shop
+        );
+
+        $theme_value = $theme_response['body']['asset']['value'] ?? '';
+
+        if (empty($theme_value)) return false;
+
+        $theme_value = preg_replace(
+            '#\s*<script[^>]*cdn\.seersco\.com[^>]*></script>#i',
+            '',
+            $theme_value
+        );
+
+        $theme_value = preg_replace(
+            '#\s*<script[^>]*seersco\.com[^>]*></script>#i',
+            '',
+            $theme_value
+        );
+
+        $script_tag = '<script src="' . $cb_js_url . '" data-shopify-cmp="1"></script>';
+
+        if (stripos($theme_value, '<head') !== false) {
+            $theme_value = preg_replace(
+                '/<head([^>]*)>/i',
+                '<head$1>' . "\n    " . $script_tag,
+                $theme_value,
+                1
+            );
+        }
+
+        $this->prepare_api_condition(
+            ['themes', $theme_id, 'assets'],
+            [
+                'asset' => [
+                    'key'   => 'layout/theme.liquid',
+                    'value' => $theme_value
+                ]
+            ],
+            'PUT',
+            '0',
+            $token,
+            $shop
+        );
+
+        return true;
+    }
+
+    public function get_api_version() {
+        $date = strtotime('-1 day', strtotime(date('Y-m-d')));
+        $month = date('m', $date);
+        $year = date('Y', $date);
+        if ($month <= 3) return $year . '-01';
+        if ($month <= 6) return $year . '-04';
+        if ($month <= 9) return $year . '-07';
+        return $year . '-10';
     }
 
 }

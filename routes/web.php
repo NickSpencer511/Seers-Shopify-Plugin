@@ -147,3 +147,10 @@ Route::get('/', function () {
 });
 
 Route::get('/user', [UserController::class, 'userdahsboard']);
+
+
+Route::get('/check-environment', function () {
+    $sitePath = env('APP_URL');
+
+    return $sitePath;
+});
