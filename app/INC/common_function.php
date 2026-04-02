@@ -715,7 +715,7 @@ class common_function {
 
         $editor_url = "https://{$shop}/admin/themes/{$theme_id}/editor"
             . "?context=apps"
-            . "&appEmbed={$client_id}%2Fcookie_banner";
+            . "&appEmbed={$client_id}%2Fcookie-banner-embed";
 
         // \Log::info('activate_app_embed - editor_url: ' . $editor_url);
 
@@ -747,7 +747,7 @@ class common_function {
 
         $editor_url = "https://{$shop}/admin/themes/{$theme_id}/editor"
             . "?context=apps"
-            . "&appEmbed={$client_id}%2Fcookie_banner";
+            . "&appEmbed={$client_id}%2Fcookie-banner-embed";
 
         // \Log::info('deactivate_app_embed - editor_url: ' . $editor_url);
 
@@ -1281,6 +1281,7 @@ private function cleanup_script_tags($shop, $token, $fresh_cf = null) {
         $host = isset($_REQUEST['host']) ? $_REQUEST['host'] : '';
 
         if (!empty($host)) {
+            $action = ($type === 'APP') ? 'APP' : 'REMOTE';
             echo '<!DOCTYPE html>
             <html>
             <head>
@@ -1294,7 +1295,7 @@ private function cleanup_script_tags($shop, $token, $fresh_cf = null) {
                     });
                     var Redirect = AppBridge.actions.Redirect;
                     var redirect = Redirect.create(app);
-                    redirect.dispatch(Redirect.Action.REMOTE, "' . $url . '");
+                    redirect.dispatch(Redirect.Action.' . $action . ', "' . $url . '");
                 </script>
             </head>
             <body></body>

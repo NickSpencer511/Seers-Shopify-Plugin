@@ -26,7 +26,12 @@ class UserController extends Controller
 
             if (empty($current_user)) {
                 $cf_obj = new common_function();
-                $cf_obj->shopify_redirect($siteurl . '/404', 'REMOTE');
+                // Store not found — trigger re-install OAuth
+                $install_url = "https://" . $shop . "/admin/oauth/authorize?client_id="
+                    . config('app.shopify_apikey')
+                    . "&scope=" . urlencode(config('app.shopify_scope'))
+                    . "&redirect_uri=" . urlencode(rtrim(config('app.url'), '/'));
+                $cf_obj->shopify_redirect($install_url, 'REMOTE');
                 exit;
             }
 
@@ -49,7 +54,7 @@ class UserController extends Controller
                     $client_id  = config('app.shopify_apikey');
                     $editor_url = "https://{$shop}/admin/themes/{$theme_id}/editor"
                         . "?context=apps"
-                        . "&appEmbed={$client_id}%2Fcookie_banner";
+                        . "&appEmbed={$client_id}%2Fcookie-banner-embed";
                 }
             }
 

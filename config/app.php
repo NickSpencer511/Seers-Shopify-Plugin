@@ -209,7 +209,7 @@ return [
     'site_email' => env('SITE_EMAIL'),
     'table_user_stores' => env('TABLE_USER_STORES'),
     // 'url_user' => env('APP_URL', 'http://localhost') . '/user/',
-    'url_user' => env('SITE_PATH', env('APP_URL')),
+    'url_user' => rtrim(env('SITE_PATH', env('APP_URL')), '/') . '/user',
     'url_assets' => env('APP_URL', 'http://localhost') . 'assets/',
 
 ];
