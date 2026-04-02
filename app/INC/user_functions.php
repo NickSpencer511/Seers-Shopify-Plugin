@@ -57,8 +57,8 @@ class User_functions extends common_function {
 
             //$script = '<script data-key="' . $datakey . '" data-name="CookieXray" src="https://cmp.seersco.com/script/cb.js" type="text/javascript"></script>';
             //fix by Shoaib for scripts added in old way start
-            $script = '<script(.*?)src="http://127.0.0.1:2000/script/cb.js"(.*?)>(.*?)</script>';
-            // $script = '<script(.*?)src="https://cmp.seersco.com/script/cb.js"(.*?)>(.*?)</script>';
+            // $script = '<script(.*?)src="http://127.0.0.1:2000/script/cb.js"(.*?)>(.*?)</script>';
+            $script = '<script(.*?)src="https://cmp.seersco.com/script/cb.js"(.*?)>(.*?)</script>';
             $script2 = '<script(.*?)src="https://seersco.com/script/cb.js"(.*?)>(.*?)</script>';
 
             $themes = $this->prepare_api_condition(array('themes'), array('role' => 'main'), 'GET', '0', '', $curshop);

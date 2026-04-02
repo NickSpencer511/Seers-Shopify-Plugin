@@ -203,7 +203,7 @@ return [
     'seers_api_base_url' => env('SEERS_API_BASE_URL', 'https://cmp.seersco.com/api/v2/'),
     'seers_api_secret'   => env('SEERS_API_SECRET', ''),
     'seers_cmp_dashboard_url' => env('SEERS_CMP_DASHBOARD_URL', 'https://app.seersco.com'),
-    'cmp_vapor_api_url' => env('CMP_VAPOR_API_URL', 'http://127.0.0.1:2000/api/v2/'),
+    'cmp_vapor_api_url' => env('CMP_VAPOR_API_URL', 'http://cmp.seersco.com/api/v2/'),
     'site_path' => env('SITE_PATH'),
     'site_name' => env('SITE_NAME'),
     'site_email' => env('SITE_EMAIL'),

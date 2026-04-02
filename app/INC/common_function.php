@@ -26,8 +26,11 @@ class common_function {
     // public $apisecrekkey = '';
     // protected $apibaseurl = "https://cmp.seersco.com/api/v2/";
     // protected $apibaseurl = "http://127.0.0.1:2000/api/v2/";
-    // protected $apibaseurl = '';
+    protected $apibaseurl = '';
+    protected $apisecrekkey = '';
     protected $last_query = '';
+    protected $charge_approve = '';
+
 
     public function __construct($shop = '') {
         // $this->apibaseurl   = env('SEERS_API_BASE_URL', 'https://cmp.seersco.com/api/v2/');
