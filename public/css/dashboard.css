@@ -5,6 +5,71 @@
     padding: 0;
 } */
 
+/* Modal Overlay Styles */
+.seers-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.3s ease;
+}
+
+.seers-modal-overlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+.seers-modal-content {
+    background: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    position: relative;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.seers-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #888;
+    line-height: 1;
+}
+
+.seers-modal-close:hover {
+    color: #333;
+}
+
+.seers-modal-content h2 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.seers-modal-content p {
+    margin-bottom: 25px;
+    color: #666;
+    font-size: 16px;
+}
+
+.seers-modal-content .seers-cms-dashboard-customize {
+    display: inline-block;
+    text-decoration: none;
+    padding: 12px 24px;
+}
+
 .seers-cms-dashboard {
     width: 95%;
     margin: auto;
@@ -140,6 +205,15 @@
     border: none;
     cursor: pointer;
     margin: 0 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    line-height: normal;
+    vertical-align: middle;
+    text-decoration: none;
+    font-family: inherit;
+    font-size: 14px;
 }
 
 .seers-cms-dashboard-customize {
@@ -150,6 +224,22 @@
     font-size: 14px;
     font-weight: bold;
 }
+
+/* .seers-cms-dashboard-btn {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+.seers-cms-dashboard-customize {
+    background-color: #fff;
+    color: #0061FE;
+    border: 1px solid #0061FE;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+} */
 
 .seers-cms-dashboard-spremium {
     background-color: #0061FE;
@@ -210,10 +300,10 @@
         width: 50%;
         margin-left: 3%;
     }
-    
+
     .seers-cms-dashboard-overview-item-box-identation {
         margin-left: 10%;
-    } 
+    }
 }
 @media (max-width : 1400px) {
     .seers-cms-dashboard-overview-item {
@@ -222,10 +312,10 @@
         width: 50%;
         margin-left: 7%;
     }
-    
+
     .seers-cms-dashboard-overview-item-box-identation {
         margin-left: 10%;
-    } 
+    }
 }
 
 
@@ -236,10 +326,10 @@
         width: 50%;
         margin-left: 3%;
     }
-    
+
     .seers-cms-dashboard-overview-item-box-identation {
         margin-left: 10%;
-    } 
+    }
 }
 
 
@@ -270,10 +360,10 @@
         width: 50%;
         margin-left: 16%;
     }
-    
+
     .seers-cms-dashboard-overview-item-box-identation {
         margin-left: 10%;
-    } 
+    }
 }
 
 @media (max-width : 830px) {
@@ -311,10 +401,10 @@
         justify-content: center;
         padding: 20px 7px;
     }
-    
+
     .seers-cms-dashboard-overview-item-box-identation {
         margin-left: 3%;
-    } 
+    }
 
     .seers-cms-dashboard-overview-align {
         margin-left: 6px;

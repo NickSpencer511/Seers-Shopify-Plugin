@@ -23,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // Force Laravel to always use APP_URL for URL generation
+        \URL::forceRootUrl(config('app.url'));
+        // Also force HTTPS since ngrok uses https
+        \URL::forceScheme('https');
     }
 }

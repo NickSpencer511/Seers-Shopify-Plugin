@@ -1,0 +1,8 @@
+name = "Cookie Banner"
+uid = "99fb5b79-b8e6-7338-d15e-b96f1fe48a658c257937"
+type = "theme"
+handle = "cookie-banner-embed"
+
+[[targeting]]
+  target = "head"
+  order = 0

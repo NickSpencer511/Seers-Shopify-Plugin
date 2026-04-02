@@ -45,6 +45,19 @@
                 <div class="seers-cms-dashboard-value seers-cms-dashboard-green">Activated</div>
                 </div>
             </div>
+            @if(!empty($editor_url))
+                <div id="editorModal" class="seers-modal-overlay">
+                    <div class="seers-modal-content">
+                        <span class="seers-modal-close" id="closeModal">&times;</span>
+                        <h2>Configuration Required</h2>
+                        <p>To complete your setup, please enable the banner in your Theme Editor.</p>
+                        <button class="seers-cms-dashboard-btn seers-cms-dashboard-customize"
+                            onclick="window.open('{{ $editor_url }}', '_blank')">
+                            Enable in Theme Editor
+                        </button>
+                    </div>
+                </div>
+            @endif
             <div class="seers-cms-dashboard-overview-item seers-cms-dashboard-overview-item-box-identation">
                 <div class="seers-cms-dashboard-icon">
                     <svg width="50" height="50" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -85,7 +98,7 @@
                         <path d="M17.3689 86.2767C16.811 86.207 16.2483 86.3617 15.8045 86.7069C15.3607 87.0521 15.0722 87.5595 15.0024 88.1174L14.8233 89.5484C7.26102 78.8936 3.72903 65.8992 4.8572 52.8823C5.98537 39.8654 11.7003 27.6723 20.983 18.4775C21.182 18.2819 21.3404 18.0489 21.4492 17.7918C21.5579 17.5348 21.6149 17.2588 21.6167 16.9798C21.6186 16.7007 21.5653 16.424 21.46 16.1656C21.3546 15.9071 21.1993 15.672 21.0029 15.4737C20.8065 15.2755 20.5729 15.1179 20.3155 15.0102C20.058 14.9024 19.7818 14.8465 19.5028 14.8457C19.2237 14.8449 18.9472 14.8992 18.6891 15.0056C18.4311 15.1119 18.1966 15.2681 17.9991 15.4653C8.02509 25.3442 1.87496 38.4383 0.640818 52.4223C-0.593322 66.4063 3.1684 80.3752 11.258 91.8483L9.46658 91.5833C9.19117 91.5425 8.91042 91.5564 8.64037 91.6241C8.37031 91.6918 8.11624 91.8121 7.89266 91.978C7.44111 92.313 7.14115 92.8137 7.05878 93.37C6.97641 93.9262 7.11837 94.4923 7.45343 94.9439C7.78849 95.3954 8.2892 95.6954 8.84542 95.7778L16.0004 96.8378C16.2799 96.8791 16.5647 96.8643 16.8383 96.794C17.1119 96.7237 17.3686 96.5995 17.5935 96.4286C17.8184 96.2577 18.0069 96.0436 18.1479 95.7989C18.2889 95.5542 18.3796 95.2837 18.4146 95.0034L19.2096 88.6434C19.2442 88.3671 19.2239 88.0868 19.1501 87.8183C19.0763 87.5499 18.9504 87.2986 18.7794 87.0788C18.6085 86.859 18.396 86.6751 18.154 86.5375C17.9119 86.3998 17.6452 86.3112 17.3689 86.2767Z" fill="#0061FE"/>
                         <path d="M116.623 21.5999C117.185 21.5999 117.724 21.3765 118.122 20.9789C118.519 20.5814 118.743 20.0421 118.743 19.4799C118.743 18.9176 118.519 18.3784 118.122 17.9808C117.724 17.5832 117.185 17.3599 116.623 17.3599H110.263C109.7 17.3599 109.161 17.5832 108.764 17.9808C108.366 18.3784 108.143 18.9176 108.143 19.4799V25.8399C108.143 26.4022 108.366 26.9414 108.764 27.339C109.161 27.7365 109.7 27.9599 110.263 27.9599C110.825 27.9599 111.364 27.7365 111.762 27.339C112.159 26.9414 112.383 26.4022 112.383 25.8399V25.1408C120.107 35.7217 123.809 48.7076 122.828 61.7709C121.846 74.8341 116.244 87.1207 107.025 96.4282C106.629 96.8277 106.408 97.368 106.411 97.9303C106.414 98.4925 106.64 99.0307 107.039 99.4264C107.439 99.8221 107.979 100.043 108.541 100.04C109.104 100.038 109.642 99.8116 110.037 99.4121C120.123 89.2297 126.183 75.7425 127.101 61.4405C128.018 47.1385 123.731 32.9875 115.029 21.5999H116.623Z" fill="#0061FE"/>
                         </svg>
-                        
+
                 </div>
                 <div class="seers-cms-dashboard-overview-align">
                 <div class="seers-cms-dashboard-status">Language</div>
@@ -110,7 +123,14 @@
         <hr class="seers-cms-dashboard-overview-hr">
         <div class="seers-cms-dashboard-actions">
             <button class="seers-cms-dashboard-btn seers-cms-dashboard-customize">Customise Banner</button>
-            <button class="seers-cms-dashboard-btn seers-cms-dashboard-spremium seers-paid-feature-opener customizeSeersBtn" data-tab="Preferences" name="dashboardpremium">Get More Features</button>
+            {{-- <button class="seers-cms-dashboard-btn seers-cms-dashboard-spremium seers-paid-feature-opener customizeSeersBtn" data-tab="Preferences" name="dashboardpremium">Get More Features</button> --}}
+            @if(!empty($editor_url))
+            <button class="seers-cms-dashboard-btn seers-cms-dashboard-spremium"
+            {{-- <button class="seers-cms-dashboard-btn seers-cms-dashboard-customize" --}}
+                onclick="window.open('{{ $editor_url }}', '_blank')">
+                Enable in Theme Editor
+            </button>
+            @endif
         </div>
     </div>
     {{-- <div class="seers-cms-dashboard-section-video">
@@ -120,20 +140,20 @@
           </video>
     </div> --}}
     <div class="seers-cms-dashboard-section-video">
-    {{-- <iframe width="96%" height="98%" 
-        src="https://www.youtube.com/embed/WbcGhSviCEg?start=7" 
-        title="YouTube video player" 
-        frameborder="0" 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    {{-- <iframe width="96%" height="98%"
+        src="https://www.youtube.com/embed/WbcGhSviCEg?start=7"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowfullscreen>
     </iframe> --}}
-    <iframe width="96%" height="98%" 
-    src="https://www.youtube.com/embed/itGiXC_PepI?si=z1vuiAaRJUPbWKzX" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    <iframe width="96%" height="98%"
+    src="https://www.youtube.com/embed/itGiXC_PepI?si=z1vuiAaRJUPbWKzX"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
     referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-        </div>    
+        </div>
     </div>
         <div class="seers-cms-dashboard-recent-logs seers-paid-feature-opener customizeSeersBtn" data-tab="Reports" data-subtab="ConsentLog" data-loading-text="Please Wait..." name="recentslogs">
             <p>Recent Consent Logs</p>
@@ -145,39 +165,56 @@
         </div> --}}
     </div>
     <script>
-        const customizeButton = document.querySelector('.seers-cms-dashboard-customize');
-        customizeButton.addEventListener('click', () => {
-            const contentSections = document.querySelectorAll('.content-section');
-            contentSections.forEach(section => {
-                if (section.getAttribute('data-page') === 'Visuals') {
-                    section.style.display = 'block';
-                } else {
-                    section.style.display = 'none';
-                }
+       document.addEventListener('DOMContentLoaded', () => {
+        const modal   = document.getElementById('editorModal');
+        const closeBtn = document.getElementById('closeModal');
+
+        // Only show modal once — on first install
+        // After user closes it, never show again automatically
+        if (modal) {
+            var modalShownKey = 'seers_editor_modal_shown_<?php echo $current_user['store_user_id'] ?? "0"; ?>';
+            var alreadyShown  = localStorage.getItem(modalShownKey);
+
+            if (!alreadyShown) {
+                setTimeout(() => {
+                    modal.classList.add('active');
+                }, 500);
+            }
+        }
+
+        // Close modal and mark as shown
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+                var modalShownKey = 'seers_editor_modal_shown_<?php echo $current_user['store_user_id'] ?? "0"; ?>';
+                localStorage.setItem(modalShownKey, '1');
             });
+        }
+
+        // Close when clicking outside
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.classList.remove('active');
+                var modalShownKey = 'seers_editor_modal_shown_<?php echo $current_user['store_user_id'] ?? "0"; ?>';
+                localStorage.setItem(modalShownKey, '1');
+            }
         });
-        // const premiumButton = document.querySelector('.seers-cms-dashboard-spremium');
-        // premiumButton.addEventListener('click', () => {
-        //     const contentSections = document.querySelectorAll('.content-section');
-        //     contentSections.forEach(section => {
-        //         if (section.getAttribute('data-page') === 'Account') {
-        //             section.style.display = 'block';
-        //         } else {
-        //             section.style.display = 'none';
-        //         }
-        //     });
-        // });
-        // const recentsLogs = document.querySelector('.seers-cms-dashboard-recent-logs');
-        // recentsLogs.addEventListener('click', () => {
-        //     const contentSections = document.querySelectorAll('.content-section');
-        //     contentSections.forEach(section => {
-        //         if (section.getAttribute('data-page') === 'Account') {
-        //             section.style.display = 'block';
-        //         } else {
-        //             section.style.display = 'none';
-        //         }
-        //     });
-        // });
+    });
+
+        // Your existing script for section toggling
+        const visualsButton = document.querySelector('.seers-cms-dashboard-visuals');
+        if(visualsButton) {
+            visualsButton.addEventListener('click', () => {
+                const contentSections = document.querySelectorAll('.content-section');
+                contentSections.forEach(section => {
+                    if (section.getAttribute('data-page') === 'Visuals') {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+            });
+        }
     </script>
 </body>
 </html>
