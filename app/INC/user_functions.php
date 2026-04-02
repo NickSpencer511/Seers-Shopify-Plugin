@@ -470,4 +470,6 @@ class User_functions extends common_function {
         return ['status' => 'error', 'message' => 'Invalid response from CMP API'];
     }
 
+
+    
 }
