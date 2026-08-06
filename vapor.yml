@@ -16,7 +16,7 @@ environments:
         warm: 1
         runtime: php-8.3:al2
         build:
-            - 'composer install --no-dev'
+            - 'composer install --no-dev --ignore-platform-req=ext-sodium --ignore-platform-reqs'
             - 'php artisan event:cache'
     staging:
         # domain: gdpr-cookie-consent-banner-cookie-notice-seers.seersco.com
@@ -33,5 +33,5 @@ environments:
         warm: 1
         runtime: 'php-8.3:al2'
         build:
-            - 'composer install --no-dev'
+            - 'composer install --no-dev --ignore-platform-req=ext-sodium --ignore-platform-reqs'
             - 'php artisan event:cache'

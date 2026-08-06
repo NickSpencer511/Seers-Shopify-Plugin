@@ -451,7 +451,7 @@ class User_functions extends common_function {
             }
         }
         if (!empty($response['access_token']) && !empty($response['domain_id'])) {
-            $url = 'https://app.seersco.com/token/?access_token=' . urlencode($response['access_token']) . '&domain_id=' . urlencode($response['domain_id']);
+            $url = 'https://app.seersco.com/token/?access_token=' . urlencode($response['access_token']) . '&domain_id=' . urlencode($response['domain_id']) . '&platform=shopify';
             if (!empty($tab_name)) {
                 $url .= '&tab_name=' . urlencode($tab_name);
             }
