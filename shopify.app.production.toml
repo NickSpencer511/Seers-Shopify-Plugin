@@ -1,0 +1,16 @@
+name = "GDPR Cookie Consent - CMP"
+client_id = "f9a59ca1f7f63d4c0bb6427f26b1e746"
+application_url = "https://gdpr-cookie-consent-banner-cookie-notice-seers.seersco.com"
+embedded = true
+
+[access_scopes]
+scopes = "read_themes,write_themes,read_script_tags,write_script_tags"
+
+[auth]
+redirect_urls = [
+  "https://gdpr-cookie-consent-banner-cookie-notice-seers.seersco.com",
+  "https://gdpr-cookie-consent-banner-cookie-notice-seers.seersco.com/auth/callback"
+]
+
+[webhooks]
+api_version = "2024-10"
