@@ -280,7 +280,8 @@ class User_functions extends common_function {
 
         $shop = isset($_POST['shop']) ? $_POST['shop'] : $_GET['shop'];
         $email = isset($_POST['email']) ? $_POST['email'] : null;
-        $token = isset($_POST['token']) ? $_POST['token'] : null;
+        // Shopify token comes from our DB, never from the browser
+        $token = $this->current_store_obj['token'] ?? null;
 
         if (!$domain || !$email || !$shop) {
             return [
@@ -356,7 +357,8 @@ class User_functions extends common_function {
         $shop = isset($_POST['shop']) ? $_POST['shop'] : $_GET['shop'];
         $email = isset($_POST['email']) ? $_POST['email'] : null;
         $data = isset($_POST['data']) ? $_POST['data'] : null;
-        $token = isset($_POST['token']) ? $_POST['token'] : null;
+        // Shopify token comes from our DB, never from the browser
+        $token = $this->current_store_obj['token'] ?? null;
         $domain_id = $_POST['domain_id'] ?? '';
         $user_id = $_POST['user_id'] ?? '';
 
@@ -408,7 +410,6 @@ class User_functions extends common_function {
                 'status' => 'success',
                 'message' => 'Changes Saved Successfully',
                 'data' => $api_response,
-                'token' => $token,
                 'shop' => $shop,
                 'allscript' => $allscript,
             ];

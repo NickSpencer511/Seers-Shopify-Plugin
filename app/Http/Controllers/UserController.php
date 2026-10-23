@@ -19,7 +19,8 @@ class UserController extends Controller
         $devmode = 'dev';
         $current_user = "";
 
-        if (isset($_REQUEST['shop']) && $_REQUEST['shop'] != '') {
+        $cf_check = new common_function();
+        if (isset($_REQUEST['shop']) && $cf_check->is_valid_shop_domain($_REQUEST['shop'])) {
             $shop = $_REQUEST['shop'];
             $uf_obj = new user_functions($shop);
             $current_user = $uf_obj->get_store_detail_obj();

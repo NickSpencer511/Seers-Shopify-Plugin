@@ -200,6 +200,8 @@ return [
     'shopify_app_handle'       => env('SHOPIFY_APP_HANDLE', ''),
     'shopify_extension_handle' => env('SHOPIFY_EXTENSION_HANDLE', ''),
     'shopify_scope' => env('SHOPIFY_SCOPE'),
+    // false = only log webhooks with a bad HMAC instead of rejecting them (rollout safety switch)
+    'shopify_webhook_hmac_enforce' => env('SHOPIFY_WEBHOOK_HMAC_ENFORCE', true),
     'seers_api_base_url' => env('SEERS_API_BASE_URL', 'https://cmp.seersco.com/api/v2/'),
     'seers_api_secret'   => env('SEERS_API_SECRET', ''),
     'seers_cmp_dashboard_url' => env('SEERS_CMP_DASHBOARD_URL', 'https://app.seersco.com'),

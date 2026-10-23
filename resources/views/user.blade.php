@@ -273,7 +273,8 @@
     });
 
     $(document).ready(function() {
-        var currentUser = <?php echo json_encode($current_user); ?>;
+        // Only what the page needs - never print the Shopify token into the page
+        var currentUser = <?php echo json_encode(['data_key' => $current_user['data_key'] ?? ''], JSON_HEX_TAG); ?>;
 
         // Always use PHP-rendered values — never live field values
         var originalDomain = '<?php echo addslashes(!empty($current_user['user_domain']) ? $current_user['user_domain'] : $current_user['domain']); ?>';

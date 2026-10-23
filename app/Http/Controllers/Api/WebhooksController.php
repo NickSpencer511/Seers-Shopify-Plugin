@@ -19,16 +19,37 @@ use App\INC\user_functions;
 
 class WebhooksController extends Controller
 {
+    /**
+     * Methods the dashboard is allowed to call through ajax_actions (see public/js/custom.js, resources/views).
+     * Anything else (e.g. get_store_detail_obj, which returns the Shopify token) is refused.
+     */
+    private const AJAX_METHODS = [
+        'change_appStatus',
+        'get_customize_redirect_url',
+        'get_user_data',
+        'lookup_domain_by_key',
+        'remove_code',
+        'update_store_data',
+        'update_user_data',
+    ];
 
     /**
      * GDPR - Customer data request webhook
      */
     public function CustomerRequest(Request $request)
     {
+        $body = $this->verified_webhook_body($request);
+        if ($body === null) {
+            return $this->unauthorized_webhook();
+        }
+
         $cf_obj = new common_function();
 
-        $shop_info = file_get_contents('php://input');
-        $shop_info = json_decode($shop_info, TRUE);
+        $shop_info = json_decode($body, TRUE);
+
+        if (empty($shop_info['shop_domain'])) {
+            return response()->json(['status' => 200, 'data' => ""]);
+        }
 
         $selected_field = 'store_user_id,email';
         $where = ['shop' => $shop_info['shop_domain']];
@@ -63,11 +84,31 @@ class WebhooksController extends Controller
     }
 
     /**
+     * GDPR - Customer data webhook. The app stores no customer data, so it only acknowledges.
+     */
+    public function CustomerData(Request $request)
+    {
+        if ($this->verified_webhook_body($request) === null) {
+            return $this->unauthorized_webhook();
+        }
+
+        return response()->json(['status' => 200, 'data' => ""]);
+    }
+
+    /**
      * GDPR - Shop info remove webhook
      */
     public function ShopinfoRemove(Request $request)
     {
+        if ($this->verified_webhook_body($request) === null) {
+            return $this->unauthorized_webhook();
+        }
+
         $shop = $this->resolve_shop();
+
+        if (empty($shop)) {
+            return response()->json(['status' => 200, 'data' => ""]);
+        }
 
         $cf_obj = new common_function();
         $us_obj = new User_functions($shop);
@@ -120,6 +161,10 @@ class WebhooksController extends Controller
     public function AppUninstalled(Request $request)
     {
         Log::info('AppUninstalled webhook received');
+
+        if ($this->verified_webhook_body($request) === null) {
+            return $this->unauthorized_webhook();
+        }
 
         $shop = $this->resolve_shop();
 
@@ -174,16 +219,16 @@ class WebhooksController extends Controller
      */
     public function ShopUpdate(Request $request)
     {
+        $shop_update = $this->verified_webhook_body($request);
+        if ($shop_update === null) {
+            return $this->unauthorized_webhook();
+        }
+
         $shop = $this->resolve_shop();
 
         $cf_obj = new common_function($shop);
 
-        $hmac_header = $_SERVER['HTTP_X_SHOPIFY_HMAC_SHA256'];
-        $shop_update = file_get_contents('php://input');
-
-        $verified = $cf_obj->verify_webhook($shop_update, $hmac_header);
-
-        if (!empty($cf_obj) && $verified && $cf_obj->is_json($shop_update)) {
+        if (!empty($shop) && $cf_obj->is_json($shop_update)) {
             $shop_detail_arr = json_decode($shop_update, TRUE);
 
             $fields = [
@@ -224,8 +269,17 @@ class WebhooksController extends Controller
 
             if (!empty($current_user)) {
                 if (isset($_POST['method_name']) && $_POST['method_name'] != '') {
-                    $response = call_user_func(array($uf_obj, $_POST['method_name']));
-                    return json_encode($response);
+                    if (!in_array($_POST['method_name'], self::AJAX_METHODS, true)) {
+                        Log::warning('ajax_actions - blocked method', [
+                            'method' => substr((string) $_POST['method_name'], 0, 100),
+                            'shop'   => $_POST['shop'],
+                            'ip'     => $request->ip(),
+                        ]);
+                        $is_bad_shop++;
+                    } else {
+                        $response = call_user_func(array($uf_obj, $_POST['method_name']));
+                        return json_encode($response);
+                    }
                 }
             } else {
                 $is_bad_shop++;
@@ -244,6 +298,34 @@ class WebhooksController extends Controller
     }
 
     // PRIVATE HELPER METHODS
+
+    /**
+     * Return the raw webhook body if its X-Shopify-Hmac-Sha256 header is valid, otherwise null.
+     * With SHOPIFY_WEBHOOK_HMAC_ENFORCE=false a bad HMAC is only logged (rollout safety switch).
+     */
+    private function verified_webhook_body(Request $request): ?string
+    {
+        $body = $request->getContent();
+        $hmac = $request->header('X-Shopify-Hmac-Sha256');
+
+        if ((new common_function())->verify_webhook($body, $hmac)) {
+            return $body;
+        }
+
+        Log::warning('Webhook HMAC verification failed', [
+            'path'     => $request->path(),
+            'shop'     => $request->header('X-Shopify-Shop-Domain'),
+            'ip'       => $request->ip(),
+            'enforced' => (bool) config('app.shopify_webhook_hmac_enforce', true),
+        ]);
+
+        return config('app.shopify_webhook_hmac_enforce', true) ? null : $body;
+    }
+
+    private function unauthorized_webhook()
+    {
+        return response()->json(['status' => 401, 'data' => 'Unauthorized'], 401);
+    }
 
     /**
      * Resolve shop domain from server headers or GET param.

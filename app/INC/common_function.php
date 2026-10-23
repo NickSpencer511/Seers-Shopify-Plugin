@@ -364,8 +364,57 @@ class common_function {
     }
 
     public function verify_webhook($data, $hmac_header) {
-        $calculated_hmac = base64_encode(hash_hmac('sha256', $data, config('app.shopify_secret'), true));
-        return ($hmac_header == $calculated_hmac);
+        if (!is_string($hmac_header) || $hmac_header === '') {
+            return false;
+        }
+        $calculated_hmac = base64_encode(hash_hmac('sha256', (string) $data, (string) config('app.shopify_secret'), true));
+        return hash_equals($calculated_hmac, $hmac_header);
+    }
+
+    /**
+     * Shopify shop domains are always <name>.myshopify.com
+     */
+    public function is_valid_shop_domain($shop) {
+        return is_string($shop) && preg_match('/^[a-zA-Z0-9][a-zA-Z0-9\-]*\.myshopify\.com$/D', $shop) === 1;
+    }
+
+    /**
+     * Verify the hmac Shopify adds to OAuth / app launch URLs.
+     * Takes the raw query string so no middleware (trim, empty->null) changes the signed values.
+     */
+    public function verify_oauth_hmac($raw_query) {
+        if (!is_string($raw_query) || $raw_query === '') {
+            return false;
+        }
+
+        parse_str($raw_query, $params);
+        $hmac = $params['hmac'] ?? '';
+        if (!is_string($hmac) || $hmac === '') {
+            return false;
+        }
+        unset($params['hmac'], $params['signature']);
+        ksort($params);
+
+        // Raw pairs as Shopify sent them, minus hmac/signature
+        $pairs = array_filter(explode('&', $raw_query), function ($pair) {
+            return $pair !== '' && !preg_match('/^(hmac|signature)=/', $pair);
+        });
+        sort($pairs);
+
+        // Accept the common encodings of the same signed message
+        $messages = [
+            implode('&', $pairs),
+            http_build_query($params),
+            http_build_query($params, '', '&', PHP_QUERY_RFC3986),
+        ];
+
+        $secret = (string) config('app.shopify_secret');
+        foreach ($messages as $message) {
+            if (hash_equals(hash_hmac('sha256', $message, $secret), strtolower($hmac))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     function prepare_api_condition($api_main_url_arr, $url_param_arr = array(), $method = 'GET', $is_object = 1, $token = '', $shop = '', $request_headers = array()) {

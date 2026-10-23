@@ -19,14 +19,28 @@ Route::get('/', function () {
     }
 
     $shop      = request('shop');
+
+    // Only real *.myshopify.com shops - never send our app secret or redirect to any other host
+    if (!$cf_obj->is_valid_shop_domain($shop)) {
+        Log::warning('Rejected invalid shop domain', ['shop' => substr((string) $shop, 0, 255)]);
+        return response('Invalid shop domain.', 400);
+    }
+
     $where     = ['shop' => $shop, 'status' => '1'];
     $store_row = $cf_obj->select_row(config('app.table_user_stores'), 'store_user_id, token', $where);
 
     if (request()->filled('code')) {
 
+        // Shopify always signs the OAuth callback - reject anything it did not sign
+        $raw_query = (string) (request()->server('QUERY_STRING') ?: request()->getQueryString());
+        if (!$cf_obj->verify_oauth_hmac($raw_query)) {
+            Log::warning('OAuth HMAC verification failed', ['shop' => $shop]);
+            return response('Invalid request signature.', 403);
+        }
+
         $code = request('code');
 
-        Log::info('OAuth entered', ['shop' => $shop, 'query' => request()->query()]);
+        Log::info('OAuth entered', ['shop' => $shop]);
 
         // Exchange code for token
         $ch = curl_init("https://{$shop}/admin/oauth/access_token");

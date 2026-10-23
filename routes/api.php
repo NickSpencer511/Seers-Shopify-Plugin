@@ -19,10 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/showoutput', function (Request $request) {
-    return config('database.connections.mysql');
-});
-
 //Shopify hooks endpoints...
 Route::post('/shop-info-remove', [WebhooksController::class, 'ShopinfoRemove']);
 Route::post('/customer-request', [WebhooksController::class, 'CustomerRequest']);

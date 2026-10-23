@@ -135,7 +135,7 @@
     </div>
     <script>
         $(document).ready(function() {
-            // ar currentUser = <?php echo json_encode($current_user); ?>;
+            // ar currentUser = ...;
             // console.log(currentUser['data_key']);
             // var data_key = currentUser['data_key'];
             // var token = currentUser['token'];
@@ -171,7 +171,7 @@
                     });
 
                     document.getElementById('setting_save').addEventListener('click', function() {
-                        var currentUser = <?php echo json_encode($current_user); ?>;
+                        var currentUser = <?php echo json_encode(['data_key' => $current_user['data_key'] ?? ''], JSON_HEX_TAG); ?>;
                         var token = currentUser['token'];
                         var user_doamin = $('#user_doamin').val();
                         var user_email = $('#user_email').val();
